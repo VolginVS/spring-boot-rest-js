@@ -18,14 +18,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserById(Long id) {
+    public User getById(Long id) {
         return entityManager.createQuery("from User where id = :id ", User.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }
 
     @Override
-    public List<User> getUserList() {
+    public List<User> getAll() {
         return entityManager.createQuery("from User", User.class)
                 .getResultList();
     }
@@ -37,7 +37,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void removeById(Long id) {
-        User user = getUserById(id);
+        User user = getById(id);
         entityManager.remove(user);
     }
 

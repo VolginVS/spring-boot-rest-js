@@ -64,7 +64,7 @@ public class UserController {
         String username= auth.getName();
 
         User activeUser = userService.getByUsername(username);
-        List<User> userList = userService.getUserList();
+        List<User> userList = userService.getAll();
         Set<Role> roleSet = roleService.getAllRoles();
         model.addAttribute("activeUser", activeUser);
         model.addAttribute("userList", userList);
@@ -80,7 +80,7 @@ public class UserController {
 
     @GetMapping(value = "user-edit/{id}")
     public String getUserEditPage(@PathVariable("id") Long id, Model model) {
-        User user = userService.getUserById(id);
+        User user = userService.getById(id);
         Set<Role> roleSet = roleService.getAllRoles();
         model.addAttribute("user", user);
         model.addAttribute("roleSet", roleSet);

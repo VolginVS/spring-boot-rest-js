@@ -3,6 +3,7 @@ package ru.volginvs.springbootrestjs.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,6 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login");
         http.authorizeRequests()
                 .antMatchers("/login", "/registration","/","/welcome").anonymous()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/users/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+                .antMatchers(HttpMethod.POST, "/users/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+                .antMatchers(HttpMethod.PUT, "/users/**").access("hasAnyRole('ROLE_ADMIN')")
+                .antMatchers(HttpMethod.DELETE, "/users/**").access("hasAnyRole('ROLE_ADMIN')")
+
                 .antMatchers("/user").access("hasAnyRole('ROLE_USER')")
                 .antMatchers("/admin").access("hasAnyRole('ROLE_ADMIN')")
                 .anyRequest().authenticated();

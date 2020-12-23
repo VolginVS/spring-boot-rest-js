@@ -26,14 +26,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional(readOnly = true)
-    public User getUserById(Long id) {
-        return userDao.getUserById(id);
+    public User getById(Long id) {
+        return userDao.getById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> getUserList() {
-        return userDao.getUserList();
+    public List<User> getAll() {
+        return userDao.getAll();
     }
 
     @Override
