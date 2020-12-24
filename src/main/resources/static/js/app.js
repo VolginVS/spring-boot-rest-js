@@ -30,19 +30,11 @@ function sendRequest(method, url, body = null) {
 
 const requestUrl = 'http://localhost:8080/users/'
 
-// // const subEdit = document.getElementById("submitUserEdit")
-// const subCreate = document.getElementById("submitUserCreate")
-//
-// // if(subEdit != null){
-// //     subEdit.addEventListener("click", setEditedUser)
-// // }
-// if(subCreate != null){
-//     subCreate.addEventListener("click", setCreatedUser)
-// }
-
-
 window.onload = function() {
     document.getElementById("submitUserEdit").addEventListener("click", setEditedUser)
+    document.getElementById("submitUserCreate").addEventListener("click", setCreatedUser)
+//    document.getElementById("close").onclick = document.getElementById("").reset();
+    document.getElementById("submitUserCreate").onclick = document.getElementById("createUser").reset();
 }
 
 // window.onload = function() {
@@ -149,7 +141,10 @@ const recivedJson = sendRequest('GET', requestUrl)
                 myTableBody.appendChild(myTr)
             })
 
+
             myTable.appendChild(myTableBody)
+            console.log(myTable.lastElementChild.id)
+            console.log(myTable.lastElementChild.lastElementChild.id)
         })
         .catch(err => console.log(err))
 
@@ -161,6 +156,8 @@ editUser = function(){
         tr.childNodes.forEach(node => {
             console.log(node.childNodes.value)
         })
+        document.getElementById("editForm").reset()
+
         console.log(document.getElementById("idEdit"))
         document.getElementById("idEdit").setAttribute('value', tr.childNodes[0].textContent)
         document.getElementById("usernameEdit").setAttribute('value', tr.childNodes[1].textContent)
@@ -176,6 +173,7 @@ function setEditedUser() {
         console.log(param)
         console.log(tr.childNodes[0])
         // tr.childNodes[1].textContent = recivedJson[param].id
+
         tr.childNodes[0].textContent = document.getElementById("idEdit").value
         tr.childNodes[1].textContent = document.getElementById("usernameEdit").value
         tr.childNodes[2].textContent = document.getElementById("passwordEdit").value
@@ -183,6 +181,7 @@ function setEditedUser() {
         tr.childNodes[4].textContent = document.getElementById("lastNameEdit").value
         tr.childNodes[5].textContent = document.getElementById("ageEdit").value
         tr.childNodes[6].textContent = document.getElementById("emailEdit").value
+
 
         const qqq = {
             id: parseInt(tr.childNodes[0].textContent),
@@ -211,6 +210,7 @@ function setEditedUser() {
                     document.getElementById("lastNameEdit").setAttribute('value', '')
                     document.getElementById("ageEdit").setAttribute('value', '')
                     document.getElementById("emailEdit").setAttribute('value', '')
+
                 }
                 return response.json().then(error => {
                     const e = new Error('Ошибка лол')
@@ -224,34 +224,35 @@ function setEditedUser() {
         //let param = document.getElementById("idEdit").value
         //console.log(param)
         tr = document.createElement('tr')
-        for(let i=0; i<9; i++){
+        for(let i=0; i<10; i++){
             tr.appendChild(document.createElement('td'))
         }
 
         const table = document.getElementById('userTable')
 
-        tr.childNodes[0].textContent = 1 + parseInt(table.lastElementChild.id)
+        tr.childNodes[0].textContent = 1 + parseInt(table.lastElementChild.lastElementChild.id)
         tr.childNodes[1].textContent = document.getElementById("usernameCreate").value
         tr.childNodes[2].textContent = document.getElementById("passwordCreate").value
         tr.childNodes[3].textContent = document.getElementById("firstNameCreate").value
         tr.childNodes[4].textContent = document.getElementById("lastNameCreate").value
         tr.childNodes[5].textContent = document.getElementById("ageCreate").value
         tr.childNodes[6].textContent = document.getElementById("emailCreate").value
-        tr.childNodes[7].textContent = 'Edit'
-        //tr.childNodes[7].onclick = editUser
-        tr.childNodes[8].textContent = 'Delete'
-        //tr.childNodes[8].onclick = deleteUser
+        tr.childNodes[7].textContent = 'lol'
+        tr.childNodes[8].textContent = 'Edit'
+        tr.childNodes[8].onclick = editUser
+        tr.childNodes[9].textContent = 'Delete'
+        tr.childNodes[9].onclick = deleteUser
         console.log(table.lastElementChild.id )
         table.appendChild(tr)
 
-        document.getElementById("createForm").reset()
-        document.getElementById("idCreate").setAttribute('value', '')
-        document.getElementById("usernameCreate").setAttribute('value', '')
-        document.getElementById("passwordCreate").setAttribute('value', '')
-        document.getElementById("firstNameCreate").setAttribute('value', '')
-        document.getElementById("lastNameCreate").setAttribute('value', '')
-        document.getElementById("ageCreate").setAttribute('value', '')
-        document.getElementById("emailCreate").setAttribute('value', '')
+        // document.getElementById("createForm").reset()
+        // document.getElementById("idCreate").setAttribute('value', '')
+        // document.getElementById("usernameCreate").setAttribute('value', '')
+        // document.getElementById("passwordCreate").setAttribute('value', '')
+        // document.getElementById("firstNameCreate").setAttribute('value', '')
+        // document.getElementById("lastNameCreate").setAttribute('value', '')
+        // document.getElementById("ageCreate").setAttribute('value', '')
+        // document.getElementById("emailCreate").setAttribute('value', '')
 
         const qqqq = {
             id: parseInt(tr.childNodes[0].textContent),

@@ -219,7 +219,7 @@
                         <div class="card-body">
                             <div class="row justify-content-center">
                                 <div class="col-md-3">
-                                    <form action="#" th:action="@{/user-create}" th:object="${user}" method="post">
+                                    <form id="createUser" action="#" th:action="@{/user-create}" th:object="${user}" method="post">
                                         <div class="form-group text-center">
                                             <label class="m-0 font-weight-bold" for="usernameCreate">Name:</label>
                                             <input id="usernameCreate" class="form-control" type="text"  placeholder="username">
@@ -255,7 +255,7 @@
                                             </ul>
                                         </div-->
                                         <div class="form-group text-center">
-                                            <input id="submitUserCreate" class="btn btn-success btn-lg" type="submit" value="Create user">
+                                            <a class="btn btn-success btn-lg" id="submitUserCreate" type="button" data-toggle="tab" href="#usersTable" role="tab" aria-controls="newUser" aria-selected="false">New user</a>
                                         </div>
                                     </form>
                                 </div>
@@ -277,7 +277,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form>
+            <form id="editForm">
                 <div class="row justify-content-center">
                     <div class="modal-body col-md-6 ">
                         <input id="idEdit" type="hidden"  placeholder="id">
@@ -308,8 +308,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input id="submitUserEdit" type="button" class="btn btn-primary" value="Edit">
+                    <button id="close"  type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="submitUserEdit" type="button" class="btn btn-primary" data-dismiss="modal">Edit</button>
                 </div>
             </form>
         </div>

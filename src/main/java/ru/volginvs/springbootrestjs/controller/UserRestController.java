@@ -54,7 +54,9 @@ public class UserRestController {
         if(userDTO == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        this.userService.save(UserMapper.USER_MAPPER_INSTANCE.toUser(userDTO));
+
+        User newUser = new User(UserMapper.USER_MAPPER_INSTANCE.toUser(userDTO));
+        this.userService.save(newUser);
         return new ResponseEntity<>(userDTO, headers, HttpStatus.CREATED);
     }
 

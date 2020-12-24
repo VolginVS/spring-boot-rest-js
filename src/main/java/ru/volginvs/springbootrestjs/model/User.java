@@ -51,6 +51,16 @@ public class User implements UserDetails{
         this.roles = new LinkedHashSet<>(Arrays.asList(roles));
     }
 
+    public User(User user){
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.age = user.getAge();
+        this.email = user.getEmail();
+        this.roles = user.getRoles();
+    }
+
     public Long getId() {
         return id;
     }
