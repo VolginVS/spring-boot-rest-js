@@ -10,6 +10,7 @@
     <!-- jQuery and JS bundle w/ Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script th:src="@{js/app.js}"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -53,7 +54,7 @@
                         </div>
                         <div class="card-body">
                             <table id="userTable" class="table table-striped">
-                                <thead>
+                                <!--thead>
                                 <tr>
                                     <th>Id</th>
                                     <th>Username</th>
@@ -203,11 +204,12 @@
                                         </div>
                                     </td>
                                 </tr>
-                                </tbody>
+                                </tbody-->
                             </table>
                         </div>
                     </div>
                 </div>
+
 
                 <div class="tab-pane fade" id="newUser" role="tabpanel" aria-labelledby="newUser-tab">
                     <div class="card">
@@ -217,32 +219,32 @@
                         <div class="card-body">
                             <div class="row justify-content-center">
                                 <div class="col-md-3">
-                                    <form action="#" th:action="@{/user-create}" th:object="${user}"method="post">
+                                    <form action="#" th:action="@{/user-create}" th:object="${user}" method="post">
                                         <div class="form-group text-center">
-                                            <label class="m-0 font-weight-bold" for="username">Name:</label>
-                                            <input class="form-control" type="text" th:field="*{username}" id="username" placeholder="username">
+                                            <label class="m-0 font-weight-bold" for="usernameCreate">Name:</label>
+                                            <input id="usernameCreate" class="form-control" type="text"  placeholder="username">
                                         </div>
                                         <div class="form-group text-center">
-                                            <label class="m-0 font-weight-bold" for="password">Password:</label>
-                                            <input class="form-control" type="text" th:field="*{password}" id="password" placeholder="password">
+                                            <label class="m-0 font-weight-bold" for="passwordCreate">Password:</label>
+                                            <input id="passwordCreate" class="form-control" type="text"  placeholder="password">
                                         </div>
                                         <div class="form-group text-center">
-                                            <label class="m-0 font-weight-bold" for="firstName">First Name:</label>
-                                            <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="firstname">
+                                            <label class="m-0 font-weight-bold" for="firstNameCreate">First Name:</label>
+                                            <input id="firstNameCreate" class="form-control" type="text"  placeholder="firstname">
                                         </div>
                                         <div class="form-group text-center">
-                                            <label class="m-0 font-weight-bold" for="lastName">Last Name:</label></td>
-                                            <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="lastname">
+                                            <label class="m-0 font-weight-bold" for="lastNameCreate">Last Name:</label></td>
+                                            <input id="lastNameCreate" class="form-control" type="text" placeholder="lastname">
                                         </div>
                                         <div class="form-group text-center">
-                                            <label class="m-0 font-weight-bold" for="age">Age:</label></td>
-                                            <input class="form-control" type="text" th:field="*{age}" id="age" placeholder="age">
+                                            <label class="m-0 font-weight-bold" for="ageCreate">Age:</label></td>
+                                            <input id="ageCreate" class="form-control" type="text"  placeholder="age">
                                         </div>
                                         <div class="form-group text-center">
-                                            <label class="m-0 font-weight-bold" for="email">E-mail:</label></td>
-                                            <input class="form-control" type="text" th:field="*{email}" id="email" placeholder="email">
+                                            <label class="m-0 font-weight-bold" for="emailCreate">E-mail:</label></td>
+                                            <input id="emailCreate" class="form-control" type="text" placeholder="email">
                                         </div>
-                                        <div class="form-check">
+                                        <!--div class="form-check">
                                             <ul>
                                                 <li th:each="role : ${roleSet}">
                                                     <div>
@@ -251,9 +253,9 @@
                                                     </div>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div-->
                                         <div class="form-group text-center">
-                                            <input class="btn btn-success btn-lg" type="submit" value="Create user">
+                                            <input id="submitUserCreate" class="btn btn-success btn-lg" type="submit" value="Create user">
                                         </div>
                                     </form>
                                 </div>
@@ -266,258 +268,56 @@
     </div>
 </div>
 
-<form id="editForm">
-    <div>
-        <input type="hidden" value="" id="idEdit" placeholder="id">
+<div class="modal fade " id='upd' tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+                <div class="row justify-content-center">
+                    <div class="modal-body col-md-6 ">
+                        <input id="idEdit" type="hidden"  placeholder="id">
+                        <div class="form-group text-center">
+                            <label class="m-0 font-weight-bold" for="usernameEdit">username</label>
+                            <input id="usernameEdit" type="text" class="form-control" placeholder="username">
+                        </div>
+                        <div class="form-group text-center">
+                            <label class="m-0 font-weight-bold" for="passwordEdit">password</label>
+                            <input id="passwordEdit" type="text" class="form-control"  placeholder="password" >
+                        </div>
+                        <div class="form-group text-center">
+                            <label class="m-0 font-weight-bold" for="firstNameEdit">firstName</label>
+                            <input id="firstNameEdit" type="text" class="form-control"  placeholder="firstname">
+                        </div>
+                        <div class="form-group text-center">
+                            <label class="m-0 font-weight-bold" for="lastNameEdit">lastName</label>
+                            <input id="lastNameEdit" type="text" class="form-control"  placeholder="lastname">
+                        </div>
+                        <div class="form-group text-center">
+                            <label class="m-0 font-weight-bold" for="ageEdit">Age</label>
+                            <input id="ageEdit" type="text" class="form-control"  placeholder="Age">
+                        </div>
+                        <div class="form-group text-center">
+                            <label class="m-0 font-weight-bold" for="emailEdit">E-Mail</label>
+                            <input id="emailEdit" type="text" class="form-control"  placeholder="E-Mail">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input id="submitUserEdit" type="button" class="btn btn-primary" value="Edit">
+                </div>
+            </form>
+        </div>
     </div>
-    <div>
-        <label for="firstNameEdit">firstName:</label>
-        <input type="text" id="firstNameEdit" placeholder="firstName">
-    </div>
-    <div>
-        <label for="lastNameEdit">lastName:</label>
-        <input type="text" id="lastNameEdit" placeholder="lastName">
-    </div>
-    <div>
-        <label for="addressEdit">address:</label>
-        <input type="text" id="addressEdit" placeholder="address">
-    </div>
-    <div>
-        <label for="budgetEdit">budget:</label>
-        <input type="text" id="budgetEdit" placeholder="budget">
-    </div>
-    <div>
-        <input type="button" id="submitUserEdit" type="button" value="Edit user">
-    </div>
-</form>
-
-
-<form id="createForm">
-    <div>
-        <input type="hidden" value="" id="idCreate" placeholder="id">
-    </div>
-    <div>
-        <label for="firstNameCreate">firstName:</label>
-        <input type="text" id="firstNameCreate" placeholder="firstName">
-    </div>
-    <div>
-        <label for="lastNameEdit">lastName:</label>
-        <input type="text" id="lastNameCreate" placeholder="lastName">
-    </div>
-    <div>
-        <label for="addressCreate">address:</label>
-        <input type="text" id="addressCreate" placeholder="address">
-    </div>
-    <div>
-        <label for="budgetCreate">budget:</label>
-        <input type="text" id="budgetCreate" placeholder="budget">
-    </div>
-    <div>
-        <input type="button" id="submitUserCreate" type="button" value="Create user">
-    </div>
-</form>
-
-
-<script>
-    let tr
-    const login = "admin"
-    const password = "admin"
-
-    function sendRequest(method, url, body = null) {
-        const headers = {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Accept': '*/*',
-            'Authorization': "Basic " + btoa(login + ':' + password),
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Connection': 'keep-alive'
-        }
-
-        return fetch(url, {
-            method: method,
-            headers: headers,
-            credentials: "same-origin",
-            body: (body === null) ? (null) : (JSON.stringify(body))
-        }).then(response =>{
-            if (response.ok) {
-                return response.json()
-            }
-            return response.json().then(error => {
-                const e = new Error('Ошибка лол')
-                e.data = error
-            })
-        })
-    }
-
-    const requestUrl = 'http://localhost:8080/customers/'
-
-    const bodyElem = document.querySelector('body')
-    document.getElementById("submitUserEdit").addEventListener("click", setEditedUser)
-    document.getElementById("submitUserCreate").addEventListener("click", setCreatedUser)
-
-    const recivedJson = sendRequest('GET', requestUrl)
-        .then(data => {
-            // console.log(data)
-            // console.log(data[2].value)
-            return(data)
-        })
-        .then(data => {
-            const myTable= document.createElement('table')
-            myTable.setAttribute('id', 'userTable')
-            myTable.createTHead()
-            myTable.createTBody()
-            let myTr = document.createElement('tr')
-            let myTd
-            // console.log(Object.keys(data[0]))
-            Object.keys(data[0]).forEach(key => {
-                myTd = document.createElement('th')
-                myTd.textContent = key
-                myTr.appendChild(myTd)
-                // console.log(key)
-            })
-            let myThEdit = document.createElement('th')
-            myThEdit.textContent ='Edit'
-            myTr.appendChild(myThEdit)
-            let myThDelete = document.createElement('th')
-            myThDelete.textContent ='Delete'
-            myTr.appendChild(myThDelete)
-
-            myTable.tHead.appendChild(myTr)
-
-            data.forEach(elem => {
-                myTr = document.createElement('tr')
-                myTr.setAttribute('id', elem.id)
-
-                // myTr.onclick = editUser
-
-                Object.values(elem).forEach(value => {
-                    const myTd = document.createElement('td')
-                    myTd.textContent = value
-                    myTr.appendChild(myTd)
-                })
-                myThEdit = document.createElement('td')
-                myThEdit.textContent ='Edit'
-                myThEdit.onclick = editUser
-                myTr.appendChild(myThEdit)
-                myThDelete = document.createElement('td')
-                myThDelete.textContent ='Delete'
-                myThDelete.onclick = deleteUser
-                myTr.appendChild(myThDelete)
-                myTable.appendChild(myTr)
-            })
-
-            bodyElem.appendChild(myTable)
-        })
-        .catch(err => console.log(err))
-
-    editUser = function(){
-        let param = event.target.parentNode.id
-        tr = event.target.parentNode
-        console.log(event.target)
-        tr.childNodes.forEach(node => {
-            console.log(node.value)
-        })
-        // document.getElementById("idEdit").setAttribute('value', recivedJson[param].id)
-        document.getElementById("idEdit").setAttribute('value', tr.childNodes[0].textContent)
-        document.getElementById("firstNameEdit").setAttribute('value', tr.childNodes[1].textContent)
-        document.getElementById("lastNameEdit").setAttribute('value', tr.childNodes[2].textContent)
-        document.getElementById("addressEdit").setAttribute('value', tr.childNodes[3].textContent)
-        document.getElementById("budgetEdit").setAttribute('value', tr.childNodes[4].textContent)
-    }
-
-    function setEditedUser() {
-        const edit = sendRequest('PUT', requestUrl, qqq)
-            .then(response => {
-                //If request success, edit line with user in the table
-                if (response.ok) {
-
-                    let param = document.getElementById("idEdit").value
-                    console.log(param)
-                    // tr.childNodes[1].textContent = recivedJson[param].id
-                    tr.childNodes[1].textContent = document.getElementById("firstNameEdit").value
-                    tr.childNodes[2].textContent = document.getElementById("lastNameEdit").value
-                    tr.childNodes[3].textContent = document.getElementById("addressEdit").value
-                    tr.childNodes[4].textContent = document.getElementById("budgetEdit").value
-
-                    document.getElementById("editForm").reset()
-                    document.getElementById("idEdit").setAttribute('value', '')
-                    document.getElementById("firstNameEdit").setAttribute('value', '')
-                    document.getElementById("lastNameEdit").setAttribute('value', '')
-                    document.getElementById("addressEdit").setAttribute('value', '')
-                    document.getElementById("budgetEdit").setAttribute('value', '')
-
-                    const qqq = {
-                        id: tr.childNodes[0].textContent,
-                        firstName: tr.childNodes[1].textContent,
-                        lastName: tr.childNodes[2].textContent,
-                        address: tr.childNodes[3].textContent,
-                        budget: tr.childNodes[4].textContent
-                    }
-                }
-                return response.json().then(error => {
-                    const e = new Error('Ошибка лол')
-                    e.data = error
-                })
-            })
-            .catch(err => console.log(err))
-    }
-
-    function setCreatedUser() {
-        let param = document.getElementById("idEdit").value
-        console.log(param)
-        tr = document.createElement('tr')
-        for(let i=0; i<7; i++){
-            tr.appendChild(document.createElement('td'))
-        }
-
-        const table = document.getElementById('userTable')
-
-        tr.childNodes[0].textContent = 1 + parseInt(table.lastElementChild.id)
-        tr.childNodes[1].textContent = document.getElementById("firstNameCreate").value
-        tr.childNodes[2].textContent = document.getElementById("lastNameCreate").value
-        tr.childNodes[3].textContent = document.getElementById("addressCreate").value
-        tr.childNodes[4].textContent = document.getElementById("budgetCreate").value
-        tr.childNodes[5].textContent = 'Edit'
-        tr.childNodes[5].onclick = editUser
-        tr.childNodes[6].textContent = 'Delete'
-        tr.childNodes[6].onclick = deleteUser
-        console.log(table.lastElementChild.id )
-        table.appendChild(tr)
-
-        document.getElementById("createForm").reset()
-        document.getElementById("idCreate").setAttribute('value', '')
-        document.getElementById("firstNameCreate").setAttribute('value', '')
-        document.getElementById("lastNameCreate").setAttribute('value', '')
-        document.getElementById("addressCreate").setAttribute('value', '')
-        document.getElementById("budgetCreate").setAttribute('value', '')
-
-        const qqq = {
-            id: tr.childNodes[0].textContent,
-            firstName: tr.childNodes[1].textContent,
-            lastName: tr.childNodes[2].textContent,
-            address: tr.childNodes[3].textContent,
-            budget: tr.childNodes[4].textContent
-        }
-        const uuu = sendRequest('POST', requestUrl, qqq)
-    }
-
-    function deleteUser() {
-        const del = sendRequest('DELETE', requestUrl+param)
-            .then(response => {
-                //If request success, delete line in the table
-                if (response.ok) {
-
-                    let param = event.target.parentNode.id
-                    console.log('Delete id='+param)
-                    document.getElementById(param).remove()
-                }
-                return response.json().then(error => {
-                    const e = new Error('Ошибка лол')
-                    e.data = error
-                })
-            })
-            .catch(err => console.log(err))
-    }
-</script>
+</div>
 
 </body>
 </html>
+
+
+

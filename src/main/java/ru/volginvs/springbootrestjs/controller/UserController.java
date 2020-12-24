@@ -64,11 +64,11 @@ public class UserController {
         String username= auth.getName();
 
         User activeUser = userService.getByUsername(username);
-        List<User> userList = userService.getAll();
-        Set<Role> roleSet = roleService.getAllRoles();
+        //List<User> userList = userService.getAll();
+        //Set<Role> roleSet = roleService.getAllRoles();
         model.addAttribute("activeUser", activeUser);
-        model.addAttribute("userList", userList);
-        model.addAttribute("roleSet", roleSet);
+        //model.addAttribute("userList", userList);
+        //model.addAttribute("roleSet", roleSet);
         return "users";
     }
 
