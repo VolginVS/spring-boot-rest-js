@@ -35,6 +35,13 @@ window.onload = function() {
     document.getElementById("submitUserCreate").addEventListener("click", setCreatedUser)
 //    document.getElementById("close").onclick = document.getElementById("").reset();
     document.getElementById("submitUserCreate").onclick = document.getElementById("createUser").reset();
+    document.getElementById("submitUserCreate").addEventListener("click", function (){
+        document.getElementById("createUser").reset();
+        document.getElementById("home-tab").setAttribute('class', "nav-link active")
+        document.getElementById("profile-tab").setAttribute('class', "nav-link")
+    })
+
+    document.getElementById("submitUserCreate").onclick = document.getElementById("createUser").reset();
 }
 
 // window.onload = function() {
@@ -124,7 +131,7 @@ const recivedJson = sendRequest('GET', requestUrl)
                 myEditButton.setAttribute('class', "btn btn-info")
                 myEditButton.setAttribute('data-toggle', "modal")
                 myEditButton.setAttribute('data-target', "#upd")
-                myThEdit.onclick = editUser
+                myEditButton.onclick = editUser
                 myTr.appendChild(myThEdit)
 
                 //Delete button
@@ -136,7 +143,7 @@ const recivedJson = sendRequest('GET', requestUrl)
                 myDeleteButton.setAttribute('class', "btn btn-danger")
                 myDeleteButton.setAttribute('data-toggle', "modal")
                 myDeleteButton.setAttribute('data-target', "#del")
-                myThDelete.onclick = deleteUser
+                myDeleteButton.onclick = deleteUser
                 myTr.appendChild(myThDelete)
                 myTableBody.appendChild(myTr)
             })
@@ -221,16 +228,17 @@ function setEditedUser() {
     }
 
     function setCreatedUser() {
-        //let param = document.getElementById("idEdit").value
+        const table = document.getElementById('userTable')
+        const param = (1 + parseInt(table.lastElementChild.lastElementChild.id)).toString()
         //console.log(param)
         tr = document.createElement('tr')
         for(let i=0; i<10; i++){
             tr.appendChild(document.createElement('td'))
         }
 
-        const table = document.getElementById('userTable')
 
-        tr.childNodes[0].textContent = 1 + parseInt(table.lastElementChild.lastElementChild.id)
+        tr.setAttribute('id', param)
+        tr.childNodes[0].textContent = param
         tr.childNodes[1].textContent = document.getElementById("usernameCreate").value
         tr.childNodes[2].textContent = document.getElementById("passwordCreate").value
         tr.childNodes[3].textContent = document.getElementById("firstNameCreate").value
@@ -238,10 +246,24 @@ function setEditedUser() {
         tr.childNodes[5].textContent = document.getElementById("ageCreate").value
         tr.childNodes[6].textContent = document.getElementById("emailCreate").value
         tr.childNodes[7].textContent = 'lol'
-        tr.childNodes[8].textContent = 'Edit'
-        tr.childNodes[8].onclick = editUser
-        tr.childNodes[9].textContent = 'Delete'
-        tr.childNodes[9].onclick = deleteUser
+
+        const myEditButton = document.createElement('button')
+        tr.childNodes[8].appendChild(myEditButton)
+        myEditButton.textContent ='Edit'
+        myEditButton.setAttribute('type', "button")
+        myEditButton.setAttribute('class', "btn btn-info")
+        myEditButton.setAttribute('data-toggle', "modal")
+        myEditButton.setAttribute('data-target', "#upd")
+        myEditButton.onclick = editUser
+
+        const myDeleteButton = document.createElement('button')
+        tr.childNodes[9].appendChild(myDeleteButton)
+        myDeleteButton.textContent ='Delete'
+        myDeleteButton.setAttribute('type', "button")
+        myDeleteButton.setAttribute('class', "btn btn-danger")
+        myDeleteButton.setAttribute('data-toggle', "modal")
+        myDeleteButton.setAttribute('data-target', "#del")
+        myDeleteButton.onclick = deleteUser
         console.log(table.lastElementChild.id )
         table.appendChild(tr)
 
@@ -269,18 +291,12 @@ function setEditedUser() {
 
     function deleteUser() {
         let param = event.target.parentNode.parentNode.id
+        console.log(param)
         const del = sendRequest('DELETE', requestUrl+param)
             .then(response => {
                 //If request success, delete line in the table
-                if (response.ok) {
-
-                    console.log('Delete id='+param)
-                    document.getElementById(param).remove()
-                }
-                return response.json.then(error => {
-                    const e = new Error('Ошибка лол')
-                    e.data = error
-                })
             })
             .catch(err => console.log(err))
+        document.getElementById(param).remove()
+
     }
