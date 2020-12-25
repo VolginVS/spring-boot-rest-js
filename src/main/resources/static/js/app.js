@@ -28,26 +28,33 @@ function sendRequest(method, url, body = null) {
     })
 }
 
-const requestUrl = 'http://localhost:8080/users/'
+const requestUrl = 'http://localhost:8080/'
 
 window.onload = function() {
     document.getElementById("submitUserEdit").addEventListener("click", setEditedUser)
-    document.getElementById("submitUserCreate").addEventListener("click", setCreatedUser)
-//    document.getElementById("close").onclick = document.getElementById("").reset();
-    document.getElementById("submitUserCreate").onclick = document.getElementById("createUser").reset();
-    document.getElementById("submitUserCreate").addEventListener("click", function (){
-        document.getElementById("createUser").reset();
+    document.getElementById("submitUserCreate").addEventListener("click", function(){
+        setCreatedUser()
         document.getElementById("home-tab").setAttribute('class', "nav-link active")
+        document.getElementById("home-tab").setAttribute('aria-selected', "true")
         document.getElementById("profile-tab").setAttribute('class', "nav-link")
+        document.getElementById("profile-tab").setAttribute('aria-selected', "false")
+        document.getElementById("newUser").setAttribute('class', "tab-pane fade")
+        document.getElementById("allUsers").setAttribute('class', "tab-pane fade active show")
+        document.getElementById("createUser").reset();
+
+        //Drop checkboxes
+        const array = document.getElementsByClassName('form-check-input')
+        for(let i=0; i<array.length; i++){
+            console.log(array[i])
+            array[i].removeAttribute('checked')
+        }
+
     })
+//    document.getElementById("close").onclick = document.getElementById("").reset();
 
-    document.getElementById("submitUserCreate").onclick = document.getElementById("createUser").reset();
+
+//    document.getElementById("submitUserCreate").onclick = document.getElementById("createUser").reset();
 }
-
-// window.onload = function() {
-//     document.getElementById("submitUserCreate").addEventListener("click", setCreatedUser)
-// }
-
 
 loginForm = "    username: 'tt',\n" +
     "    password: 'tt'"
@@ -77,17 +84,86 @@ function loginRequest(method, url, body = null) {
         })
     })
 }
+let roles
 
-const recivedJson = sendRequest('GET', requestUrl)
+const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
+        .then(data => {
+            roles = data
+
+            const rolesChecksEdit = document.getElementById("rolesCheckEdit")
+            roles.forEach(role => {
+                const li = document.createElement('li')
+                const div = document.createElement('div')
+                const label = document.createElement('label')
+                const input = document.createElement('input')
+                input.addEventListener('change', function(){
+                    if(input.hasAttribute('checked')){
+                        input.removeAttribute('checked')
+                    } else {
+                        input.setAttribute('checked', 'checked')
+                    }
+                })
+
+                input.setAttribute('class', 'form-check-input')
+                input.setAttribute('type', 'checkbox')
+                input.setAttribute('value', 'on')
+                input.setAttribute('id', 'roleEdit'+role.id) // Take role 'id'
+                console.log(Object.values(role)[1])
+                console.log(Object.values(role))
+                label.setAttribute('class', '')
+                label.textContent = Object.values(role)[1] // Take role 'name'
+                div.appendChild(input)
+                div.appendChild(label)
+                li.appendChild(div)
+                rolesChecksEdit.appendChild(li)
+            })
+
+            const rolesChecksCreate = document.getElementById("rolesCheckCreate")
+
+            roles.forEach(role => {
+                const li = document.createElement('li')
+                const div = document.createElement('div')
+                const label = document.createElement('label')
+                const input = document.createElement('input')
+                input.addEventListener('change', function(){
+                    if(input.hasAttribute('checked')){
+                        input.removeAttribute('checked')
+                    } else {
+                        input.setAttribute('checked', 'checked')
+                    }
+                })
+
+                input.setAttribute('class', 'form-check-input')
+                input.setAttribute('type', 'checkbox')
+                input.setAttribute('value', 'on')
+                input.setAttribute('id', 'roleCreate'+Object.values(role)[0]) // Take role 'id'
+                console.log(Object.values(role)[1])
+                console.log(Object.values(role))
+                label.setAttribute('class', '')
+                label.textContent = Object.values(role)[1] // Take role 'name'
+                div.appendChild(input)
+                div.appendChild(label)
+                li.appendChild(div)
+                rolesChecksCreate.appendChild(li)
+            })
+
+        })
+         .catch(err => console.log(err))
+
+let users
+
+const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
         .then(data => {
             // console.log(data)
             // console.log(data[2].value)
+            users = data
             return(data)
         })
         .then(data => {
-            const myTable = document.getElementById('userTable')
+            const myTable = document.getElementById('usersTable')
             myTable.createTHead()
             const myTableBody = myTable.createTBody()
+            myTableBody.setAttribute('id', 'usersTableBody')
             let myTr = document.createElement('tr')
             let myTd
             // console.log(Object.keys(data[0]))
@@ -115,7 +191,7 @@ const recivedJson = sendRequest('GET', requestUrl)
                     const myTd = document.createElement('td')
                     if(value != null) {
                         if(typeof(value) === 'object') {
-                            value.forEach((elem) => myTd.textContent += (" /"+ elem.name)) //Проверка, чтобы отыскать объекты типа Role и правильно их вывести
+                            value.forEach((parts) => myTd.textContent += (" /"+ parts.name)) //Проверка, чтобы отыскать объекты типа Role и правильно их вывести
                         } else {
                             myTd.textContent = value
                         }
@@ -173,6 +249,19 @@ editUser = function(){
         document.getElementById("lastNameEdit").setAttribute('value', tr.childNodes[4].textContent)
         document.getElementById("ageEdit").setAttribute('value', tr.childNodes[5].textContent)
         document.getElementById("emailEdit").setAttribute('value', tr.childNodes[6].textContent)
+
+        let userRolesIds = users
+            .find(user => user.id === parseInt(param))
+            .rolesSet.map(role=>role.id)
+        console.log(userRolesIds)
+        roles.forEach(role =>{
+            const checkbox = document.getElementById('roleEdit' + role.id)
+            if(userRolesIds.includes(role.id)) {
+                checkbox.setAttribute('checked', 'checked')
+            } else {
+                checkbox.removeAttribute('checked')
+            }
+        })
     }
 
 function setEditedUser() {
@@ -181,6 +270,16 @@ function setEditedUser() {
         console.log(tr.childNodes[0])
         // tr.childNodes[1].textContent = recivedJson[param].id
 
+        let qqqRoles = []
+        roles.forEach(role =>{
+            const checkbox = document.getElementById('roleEdit' + role.id)
+            console.log(qqqRoles)
+            if(checkbox.hasAttribute('checked')) {
+                qqqRoles.push(role)
+            }
+        })
+
+
         tr.childNodes[0].textContent = document.getElementById("idEdit").value
         tr.childNodes[1].textContent = document.getElementById("usernameEdit").value
         tr.childNodes[2].textContent = document.getElementById("passwordEdit").value
@@ -188,8 +287,9 @@ function setEditedUser() {
         tr.childNodes[4].textContent = document.getElementById("lastNameEdit").value
         tr.childNodes[5].textContent = document.getElementById("ageEdit").value
         tr.childNodes[6].textContent = document.getElementById("emailEdit").value
-
-
+        tr.childNodes[7].textContent = ""
+        qqqRoles.forEach((parts) => tr.childNodes[7].textContent += (" /"+ parts.name))
+        console.log(qqqRoles)
         const qqq = {
             id: parseInt(tr.childNodes[0].textContent),
             username: tr.childNodes[1].textContent,
@@ -198,14 +298,14 @@ function setEditedUser() {
             lastName: tr.childNodes[4].textContent,
             age: parseInt(tr.childNodes[5].textContent),
             email: tr.childNodes[6].textContent,
-            rolesSet:[{id:1,name:"ROLE_USER"}]
+            rolesSet: qqqRoles
         }
         console.log(JSON.stringify(qqq))
          // const loginnn = sendRequest('POST','http://localhost:8080/login', loginForm)
          //    .catch(err => console.log(err))
 
 
-        const edit = sendRequest('PUT', requestUrl, qqq)
+        const edit = sendRequest('PUT', requestUrl + 'users/', qqq)
             .then(response => {
                 //If request success, edit line with user in the table
                 if (response.ok) {
@@ -217,7 +317,6 @@ function setEditedUser() {
                     document.getElementById("lastNameEdit").setAttribute('value', '')
                     document.getElementById("ageEdit").setAttribute('value', '')
                     document.getElementById("emailEdit").setAttribute('value', '')
-
                 }
                 return response.json().then(error => {
                     const e = new Error('Ошибка лол')
@@ -227,8 +326,9 @@ function setEditedUser() {
             .catch(err => console.log(err))
     }
 
-    function setCreatedUser() {
-        const table = document.getElementById('userTable')
+function setCreatedUser() {
+        const table = document.getElementById('usersTable')
+        const tableBody = document.getElementById('usersTableBody')
         const param = (1 + parseInt(table.lastElementChild.lastElementChild.id)).toString()
         //console.log(param)
         tr = document.createElement('tr')
@@ -236,6 +336,14 @@ function setEditedUser() {
             tr.appendChild(document.createElement('td'))
         }
 
+        let qqqqRoles = []
+        roles.forEach(role =>{
+            const checkbox = document.getElementById('roleCreate' + role.id)
+            console.log(checkbox.attributes)
+            if(checkbox.hasAttribute('checked')) {
+                qqqqRoles.push(role)
+            }
+        })
 
         tr.setAttribute('id', param)
         tr.childNodes[0].textContent = param
@@ -245,7 +353,7 @@ function setEditedUser() {
         tr.childNodes[4].textContent = document.getElementById("lastNameCreate").value
         tr.childNodes[5].textContent = document.getElementById("ageCreate").value
         tr.childNodes[6].textContent = document.getElementById("emailCreate").value
-        tr.childNodes[7].textContent = 'lol'
+        qqqqRoles.forEach((parts) => tr.childNodes[7].textContent += (" /"+ parts.name))
 
         const myEditButton = document.createElement('button')
         tr.childNodes[8].appendChild(myEditButton)
@@ -265,7 +373,7 @@ function setEditedUser() {
         myDeleteButton.setAttribute('data-target', "#del")
         myDeleteButton.onclick = deleteUser
         console.log(table.lastElementChild.id )
-        table.appendChild(tr)
+        tableBody.appendChild(tr)
 
         // document.getElementById("createForm").reset()
         // document.getElementById("idCreate").setAttribute('value', '')
@@ -284,15 +392,18 @@ function setEditedUser() {
             lastName: tr.childNodes[4].textContent,
             age: parseInt(tr.childNodes[5].textContent),
             email: tr.childNodes[6].textContent,
-            rolesSet:[{id:1,name:"ROLE_USER"}]
+            rolesSet: qqqqRoles
         }
-        const uuu = sendRequest('POST', requestUrl, qqqq)
+        const uuu = sendRequest('POST', requestUrl + 'users/', qqqq)
+
+
+
     }
 
     function deleteUser() {
         let param = event.target.parentNode.parentNode.id
         console.log(param)
-        const del = sendRequest('DELETE', requestUrl+param)
+        const del = sendRequest('DELETE', requestUrl + 'users/' + param)
             .then(response => {
                 //If request success, delete line in the table
             })

@@ -1,10 +1,12 @@
 package ru.volginvs.springbootrestjs.dto;
 
+import java.util.Set;
+
 public class RoleDTO {
 
     private Long id;
     private String name;
-//    private Set<User> users;
+//    private Set<Long> usersId;
 
     public RoleDTO() {
     }
@@ -25,12 +27,12 @@ public class RoleDTO {
         this.name = name;
     }
 
-//    public Set<User> getUsers() {
-//        return users;
+//    public Set<Long> getUsers() {
+//        return usersId;
 //    }
 //
-//    public void setUsers(Set<User> users) {
-//        this.users = users;
+//    public void setUsers(Set<Long> usersId) {
+//        this.usersId = usersId;
 //    }
 
     @Override

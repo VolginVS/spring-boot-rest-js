@@ -23,14 +23,13 @@ public class UserRestController {
 
     private UserService userService;
 
-
     @Autowired
     public UserRestController(UserService userService){
         this.userService = userService;
     }
 
     @RequestMapping(value ="{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UserDTO> getCustomer(@PathVariable("id") Long id){
+    public ResponseEntity<UserDTO> getUsers(@PathVariable("id") Long id){
         if(id == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -48,7 +47,7 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UserDTO> saveCustomer(@RequestBody @Validated UserDTO userDTO){
+    public ResponseEntity<UserDTO> saveUsers(@RequestBody @Validated UserDTO userDTO){
         HttpHeaders headers = new HttpHeaders();
 
         if(userDTO == null) {
@@ -63,6 +62,7 @@ public class UserRestController {
     @RequestMapping(value = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDTO> updateCustomer(@RequestBody @Validated UserDTO userDTO, UriComponentsBuilder builder){
         HttpHeaders headers = new HttpHeaders();
+        
         if(userDTO == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -72,7 +72,7 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UserDTO> deleteCustomer(@PathVariable("id") Long id) {
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable("id") Long id) {
         User user = this.userService.getById(id);
 
         if (user == null) {
@@ -85,7 +85,7 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<UserDTO>> getAllCustomers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<User> users = this.userService.getAll();
 
         if (users.isEmpty()) {
