@@ -38,7 +38,7 @@ function createEditButton(){
     newEditButton.setAttribute('class', "btn btn-info")
     newEditButton.setAttribute('data-toggle', "modal")
     newEditButton.setAttribute('data-target', "#upd")
-    newEditButton.onclick = editUser
+    newEditButton.onclick = openEditUserForm
     return newEditButton
 }
 
@@ -172,7 +172,6 @@ const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
 
             myTable.tHead.appendChild(myTr)
 
-
             data.forEach(elem => {
                 myTr = document.createElement('tr')
                 myTr.setAttribute('id', elem.id)
@@ -210,14 +209,10 @@ const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
         })
         .catch(err => console.log(err))
 
-editUser = function(){
+openEditUserForm = function(){
     let param = event.target.parentNode.parentNode.id
     tr = event.target.parentNode.parentNode
-    console.log(event.target.parentNode.parentNode)
-    console.log(param)
-    tr.childNodes.forEach(node => {
-        console.log(node.childNodes.value)
-    })
+
     document.getElementById("editForm").reset()
     dropCheckboxes()
 
