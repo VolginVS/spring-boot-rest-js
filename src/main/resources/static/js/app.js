@@ -61,6 +61,31 @@ function dropCheckboxes(){
     }
 }
 
+function populateRoleCheckboxesInForm(formPrefix, userId) {
+    let userRolesIds = users
+        .find(user => user.id === parseInt(userId))
+        .rolesSet.map(role=>role.id)
+
+    roles.forEach(role =>{
+        const checkbox = document.getElementById('roleEdit' + role.id)
+        if(userRolesIds.includes(role.id)) {
+            checkbox.setAttribute('checked', 'checked')
+        } else {
+            checkbox.removeAttribute('checked')
+        }
+    })
+}
+
+function giveRolesArrayFromForm(formId){
+    let userRoles = []
+    roles.forEach(role =>{
+        const checkbox = document.getElementById(formId + role.id)
+        if(checkbox.hasAttribute('checked')) {
+            userRoles.push(role)
+        }
+    })
+    return userRoles
+}
 
 window.onload = function() {
     document.getElementById("submitUserEdit").addEventListener("click", setEditedUser)
@@ -224,34 +249,29 @@ openEditUserForm = function(){
     document.getElementById("ageEdit").setAttribute('value', tr.childNodes[5].textContent)
     document.getElementById("emailEdit").setAttribute('value', tr.childNodes[6].textContent)
 
-    let userRolesIds = users
-        .find(user => user.id === parseInt(param))
-        .rolesSet.map(role=>role.id)
 
-    roles.forEach(role =>{
-        const checkbox = document.getElementById('roleEdit' + role.id)
-        if(userRolesIds.includes(role.id)) {
-            checkbox.setAttribute('checked', 'checked')
-        } else {
-            checkbox.removeAttribute('checked')
-        }
-    })
+    // let userRolesIds = users
+    //     .find(user => user.id === parseInt(param))
+    //     .rolesSet.map(role=>role.id)
+    //
+    // roles.forEach(role =>{
+    //     const checkbox = document.getElementById('roleEdit' + role.id)
+    //     if(userRolesIds.includes(role.id)) {
+    //         checkbox.setAttribute('checked', 'checked')
+    //     } else {
+    //         checkbox.removeAttribute('checked')
+    //     }
+    // })
+
+    populateRoleCheckboxesInForm('roleEdit', param)
 }
 
 function setEditedUser() {
         let param = document.getElementById("idEdit").value
-        console.log(param)
-        console.log(tr.childNodes[0])
-        // tr.childNodes[1].textContent = recivedJson[param].id
 
-        let qqqRoles = []
-        roles.forEach(role =>{
-            const checkbox = document.getElementById('roleEdit' + role.id)
-            console.log(qqqRoles)
-            if(checkbox.hasAttribute('checked')) {
-                qqqRoles.push(role)
-            }
-        })
+
+    const qqqRoles = giveRolesArrayFromForm('roleEdit')
+
 
 
         tr.childNodes[0].textContent = document.getElementById("idEdit").value
@@ -295,16 +315,11 @@ function setCreatedUser() {
             tr.appendChild(document.createElement('td'))
         }
 
-        let qqqqRoles = []
-        roles.forEach(role =>{
-            const checkbox = document.getElementById('roleCreate' + role.id)
-            console.log(checkbox.attributes)
-            if(checkbox.hasAttribute('checked')) {
-                qqqqRoles.push(role)
-            }
-        })
 
-        tr.setAttribute('id', param)
+    const qqqqRoles = giveRolesArrayFromForm('roleCreate')
+
+
+    tr.setAttribute('id', param)
         tr.childNodes[0].textContent = param
         tr.childNodes[1].textContent = document.getElementById("usernameCreate").value
         tr.childNodes[2].textContent = document.getElementById("passwordCreate").value
