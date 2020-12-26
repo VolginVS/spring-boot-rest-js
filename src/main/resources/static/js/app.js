@@ -26,6 +26,8 @@ const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
             rolesBuff = data
             createAndAppendRoleCheckboxesToForm('edit-user-form-checkbox')
             createAndAppendRoleCheckboxesToForm('create-user-form-checkbox')
+            rolesBuff.forEach(role => console.log(role.name))
+
         })
          .catch(err => console.log(err))
 
@@ -251,46 +253,45 @@ function setEditedUser() {
         .catch(err => console.log(err))
 }
 
+
 function setCreatedUser() {
-    const table = document.getElementById('users-table')
     const tableBody = document.getElementById('users-table-body')
-    const param = (1 + parseInt(table.lastElementChild.lastElementChild.id)).toString()
-    //console.log(param)
+    const newId = (1 + parseInt(tableBody.lastElementChild.id)).toString()
+    const newUser = {
+        id: newId,
+        username: document.getElementById("usernameCreate").value,
+        password: document.getElementById("passwordCreate").value,
+        firstName: document.getElementById("firstNameCreate").value,
+        lastName: document.getElementById("lastNameCreate").value,
+        age: document.getElementById("ageCreate").value,
+        email: document.getElementById("emailCreate").value,
+        rolesSet: giveRolesArrayFromForm('create-user-form-checkbox')
+    }
+    const uuu = sendRequest('POST', requestUrl + 'users/', newUser)
+
     tr = document.createElement('tr')
+    tr.setAttribute('id', newId)
+
     for(let i=0; i<10; i++){
         tr.appendChild(document.createElement('td'))
     }
 
-    const qqqqRoles = giveRolesArrayFromForm('create-user-form-checkbox')
-
-    tr.setAttribute('id', param)
-    tr.childNodes[0].textContent = param
+    tr.childNodes[0].textContent = newId
     tr.childNodes[1].textContent = document.getElementById("usernameCreate").value
     tr.childNodes[2].textContent = document.getElementById("passwordCreate").value
     tr.childNodes[3].textContent = document.getElementById("firstNameCreate").value
     tr.childNodes[4].textContent = document.getElementById("lastNameCreate").value
     tr.childNodes[5].textContent = document.getElementById("ageCreate").value
     tr.childNodes[6].textContent = document.getElementById("emailCreate").value
-    qqqqRoles.forEach((parts) => tr.childNodes[7].textContent += (" /"+ parts.name))
+    const roles = giveRolesArrayFromForm('create-user-form-checkbox')
+    giveRolesArrayFromForm('create-user-form-checkbox').forEach((elem) => tr.childNodes[7].textContent += (" /"+ elem.name))
 
-    const myEditButton = createEditButton()
-    tr.childNodes[8].appendChild(myEditButton)
+    const editButton = createEditButton()
+    tr.childNodes[8].appendChild(editButton)
 
-    const myDeleteButton = createDeleteButton()
-    tr.childNodes[9].appendChild(myDeleteButton)
+    const deleteButton = createDeleteButton()
+    tr.childNodes[9].appendChild(deleteButton)
     tableBody.appendChild(tr)
-
-    const qqqq = {
-        id: parseInt(tr.childNodes[0].textContent),
-        username: tr.childNodes[1].textContent,
-        password: tr.childNodes[2].textContent,
-        firstName: tr.childNodes[3].textContent,
-        lastName: tr.childNodes[4].textContent,
-        age: parseInt(tr.childNodes[5].textContent),
-        email: tr.childNodes[6].textContent,
-        rolesSet: qqqqRoles
-    }
-    const uuu = sendRequest('POST', requestUrl + 'users/', qqqq)
 }
 
 function deleteUser() {
