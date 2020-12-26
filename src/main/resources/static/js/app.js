@@ -253,7 +253,6 @@ function setEditedUser() {
         .catch(err => console.log(err))
 }
 
-
 function setCreatedUser() {
     const tableBody = document.getElementById('users-table-body')
     const newId = (1 + parseInt(tableBody.lastElementChild.id)).toString()
@@ -267,31 +266,18 @@ function setCreatedUser() {
         email: document.getElementById("emailCreate").value,
         rolesSet: giveRolesArrayFromForm('create-user-form-checkbox')
     }
-    const uuu = sendRequest('POST', requestUrl + 'users/', newUser)
 
-    tr = document.createElement('tr')
-    tr.setAttribute('id', newId)
+    sendRequest('POST', requestUrl + 'users/', newUser)
+        .then( request =>{
+            sendRequest('GET', requestUrl + 'users/')
+                .then(data => {
+                    document.getElementById('users-table').innerHTML = ''
+                    populateUsersTable(data)
+                })
+                .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
 
-    for(let i=0; i<10; i++){
-        tr.appendChild(document.createElement('td'))
-    }
-
-    tr.childNodes[0].textContent = newId
-    tr.childNodes[1].textContent = document.getElementById("usernameCreate").value
-    tr.childNodes[2].textContent = document.getElementById("passwordCreate").value
-    tr.childNodes[3].textContent = document.getElementById("firstNameCreate").value
-    tr.childNodes[4].textContent = document.getElementById("lastNameCreate").value
-    tr.childNodes[5].textContent = document.getElementById("ageCreate").value
-    tr.childNodes[6].textContent = document.getElementById("emailCreate").value
-    const roles = giveRolesArrayFromForm('create-user-form-checkbox')
-    giveRolesArrayFromForm('create-user-form-checkbox').forEach((elem) => tr.childNodes[7].textContent += (" /"+ elem.name))
-
-    const editButton = createEditButton()
-    tr.childNodes[8].appendChild(editButton)
-
-    const deleteButton = createDeleteButton()
-    tr.childNodes[9].appendChild(deleteButton)
-    tableBody.appendChild(tr)
 }
 
 function deleteUser() {
