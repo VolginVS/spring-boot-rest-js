@@ -1,4 +1,7 @@
 let tr
+let roles
+let users
+
 // const login = "tt"
 // const password = "tt"
 
@@ -50,8 +53,6 @@ window.onload = function() {
         }
     })
 }
-
-let roles
 
 const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
         .then(data => {
@@ -117,8 +118,6 @@ const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
         })
          .catch(err => console.log(err))
 
-let users
-
 const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
         .then(data => {
             // console.log(data)
@@ -133,12 +132,10 @@ const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
             myTableBody.setAttribute('id', 'usersTableBody')
             let myTr = document.createElement('tr')
             let myTd
-            // console.log(Object.keys(data[0]))
             Object.keys(data[0]).forEach(key => {
                 myTd = document.createElement('th')
                 myTd.textContent = key
                 myTr.appendChild(myTd)
-                // console.log(key)
             })
             let myThEdit = document.createElement('th')
             myThEdit.textContent ='Edit'
