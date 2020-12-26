@@ -227,7 +227,6 @@ const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
                 myTableBody.appendChild(myTr)
             })
 
-
             myTable.appendChild(myTableBody)
             console.log(myTable.lastElementChild.id)
             console.log(myTable.lastElementChild.lastElementChild.id)
@@ -249,113 +248,93 @@ openEditUserForm = function(){
     document.getElementById("ageEdit").setAttribute('value', tr.childNodes[5].textContent)
     document.getElementById("emailEdit").setAttribute('value', tr.childNodes[6].textContent)
 
-
-    // let userRolesIds = users
-    //     .find(user => user.id === parseInt(param))
-    //     .rolesSet.map(role=>role.id)
-    //
-    // roles.forEach(role =>{
-    //     const checkbox = document.getElementById('roleEdit' + role.id)
-    //     if(userRolesIds.includes(role.id)) {
-    //         checkbox.setAttribute('checked', 'checked')
-    //     } else {
-    //         checkbox.removeAttribute('checked')
-    //     }
-    // })
-
     populateRoleCheckboxesInForm('roleEdit', param)
 }
 
 function setEditedUser() {
-        let param = document.getElementById("idEdit").value
-
-
+    let param = document.getElementById("idEdit").value
     const qqqRoles = giveRolesArrayFromForm('roleEdit')
 
-
-
-        tr.childNodes[0].textContent = document.getElementById("idEdit").value
-        tr.childNodes[1].textContent = document.getElementById("usernameEdit").value
-        tr.childNodes[2].textContent = document.getElementById("passwordEdit").value
-        tr.childNodes[3].textContent = document.getElementById("firstNameEdit").value
-        tr.childNodes[4].textContent = document.getElementById("lastNameEdit").value
-        tr.childNodes[5].textContent = document.getElementById("ageEdit").value
-        tr.childNodes[6].textContent = document.getElementById("emailEdit").value
-        tr.childNodes[7].textContent = ""
-        qqqRoles.forEach((parts) => tr.childNodes[7].textContent += (" /"+ parts.name))
-        console.log(qqqRoles)
-        const qqq = {
-            id: parseInt(tr.childNodes[0].textContent),
-            username: tr.childNodes[1].textContent,
-            password: tr.childNodes[2].textContent,
-            firstName: tr.childNodes[3].textContent,
-            lastName: tr.childNodes[4].textContent,
-            age: parseInt(tr.childNodes[5].textContent),
-            email: tr.childNodes[6].textContent,
-            rolesSet: qqqRoles
-        }
-
-        const edit = sendRequest('PUT', requestUrl + 'users/', qqq)
-            .then(response => {
-                return response.json().then(error => {
-                    const e = new Error('Ошибка лол')
-                    e.data = error
-                })
-            })
-            .catch(err => console.log(err))
+    tr.childNodes[0].textContent = document.getElementById("idEdit").value
+    tr.childNodes[1].textContent = document.getElementById("usernameEdit").value
+    tr.childNodes[2].textContent = document.getElementById("passwordEdit").value
+    tr.childNodes[3].textContent = document.getElementById("firstNameEdit").value
+    tr.childNodes[4].textContent = document.getElementById("lastNameEdit").value
+    tr.childNodes[5].textContent = document.getElementById("ageEdit").value
+    tr.childNodes[6].textContent = document.getElementById("emailEdit").value
+    tr.childNodes[7].textContent = ""
+    qqqRoles.forEach((parts) => tr.childNodes[7].textContent += (" /"+ parts.name))
+    console.log(qqqRoles)
+    const qqq = {
+        id: parseInt(tr.childNodes[0].textContent),
+        username: tr.childNodes[1].textContent,
+        password: tr.childNodes[2].textContent,
+        firstName: tr.childNodes[3].textContent,
+        lastName: tr.childNodes[4].textContent,
+        age: parseInt(tr.childNodes[5].textContent),
+        email: tr.childNodes[6].textContent,
+        rolesSet: qqqRoles
     }
 
-function setCreatedUser() {
-        const table = document.getElementById('usersTable')
-        const tableBody = document.getElementById('usersTableBody')
-        const param = (1 + parseInt(table.lastElementChild.lastElementChild.id)).toString()
-        //console.log(param)
-        tr = document.createElement('tr')
-        for(let i=0; i<10; i++){
-            tr.appendChild(document.createElement('td'))
-        }
+    const edit = sendRequest('PUT', requestUrl + 'users/', qqq)
+        .then(response => {
+            return response.json().then(error => {
+                const e = new Error('Ошибка лол')
+                e.data = error
+            })
+        })
+        .catch(err => console.log(err))
+}
 
+function setCreatedUser() {
+    const table = document.getElementById('usersTable')
+    const tableBody = document.getElementById('usersTableBody')
+    const param = (1 + parseInt(table.lastElementChild.lastElementChild.id)).toString()
+    //console.log(param)
+    tr = document.createElement('tr')
+    for(let i=0; i<10; i++){
+        tr.appendChild(document.createElement('td'))
+    }
 
     const qqqqRoles = giveRolesArrayFromForm('roleCreate')
 
-
     tr.setAttribute('id', param)
-        tr.childNodes[0].textContent = param
-        tr.childNodes[1].textContent = document.getElementById("usernameCreate").value
-        tr.childNodes[2].textContent = document.getElementById("passwordCreate").value
-        tr.childNodes[3].textContent = document.getElementById("firstNameCreate").value
-        tr.childNodes[4].textContent = document.getElementById("lastNameCreate").value
-        tr.childNodes[5].textContent = document.getElementById("ageCreate").value
-        tr.childNodes[6].textContent = document.getElementById("emailCreate").value
-        qqqqRoles.forEach((parts) => tr.childNodes[7].textContent += (" /"+ parts.name))
+    tr.childNodes[0].textContent = param
+    tr.childNodes[1].textContent = document.getElementById("usernameCreate").value
+    tr.childNodes[2].textContent = document.getElementById("passwordCreate").value
+    tr.childNodes[3].textContent = document.getElementById("firstNameCreate").value
+    tr.childNodes[4].textContent = document.getElementById("lastNameCreate").value
+    tr.childNodes[5].textContent = document.getElementById("ageCreate").value
+    tr.childNodes[6].textContent = document.getElementById("emailCreate").value
+    qqqqRoles.forEach((parts) => tr.childNodes[7].textContent += (" /"+ parts.name))
 
-        const myEditButton = createEditButton()
-        tr.childNodes[8].appendChild(myEditButton)
+    const myEditButton = createEditButton()
+    tr.childNodes[8].appendChild(myEditButton)
 
-        const myDeleteButton = createDeleteButton()
-        tr.childNodes[9].appendChild(myDeleteButton)
-        tableBody.appendChild(tr)
+    const myDeleteButton = createDeleteButton()
+    tr.childNodes[9].appendChild(myDeleteButton)
+    tableBody.appendChild(tr)
 
-        const qqqq = {
-            id: parseInt(tr.childNodes[0].textContent),
-            username: tr.childNodes[1].textContent,
-            password: tr.childNodes[2].textContent,
-            firstName: tr.childNodes[3].textContent,
-            lastName: tr.childNodes[4].textContent,
-            age: parseInt(tr.childNodes[5].textContent),
-            email: tr.childNodes[6].textContent,
-            rolesSet: qqqqRoles
-        }
-        const uuu = sendRequest('POST', requestUrl + 'users/', qqqq)
+    const qqqq = {
+        id: parseInt(tr.childNodes[0].textContent),
+        username: tr.childNodes[1].textContent,
+        password: tr.childNodes[2].textContent,
+        firstName: tr.childNodes[3].textContent,
+        lastName: tr.childNodes[4].textContent,
+        age: parseInt(tr.childNodes[5].textContent),
+        email: tr.childNodes[6].textContent,
+        rolesSet: qqqqRoles
     }
+    const uuu = sendRequest('POST', requestUrl + 'users/', qqqq)
+}
 
-    function deleteUser() {
-        let param = event.target.parentNode.parentNode.id
-        console.log(param)
-        const del = sendRequest('DELETE', requestUrl + 'users/' + param)
-            .then(response => {
-                //If request success, delete line in the table
-            })
-            .catch(err => console.log(err))
-        document.getElementById(param).remove()
-    }
+function deleteUser() {
+    let param = event.target.parentNode.parentNode.id
+    console.log(param)
+    const del = sendRequest('DELETE', requestUrl + 'users/' + param)
+        .then(response => {
+            //If request success, delete line in the table
+        })
+        .catch(err => console.log(err))
+    document.getElementById(param).remove()
+}
