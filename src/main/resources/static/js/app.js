@@ -16,7 +16,7 @@ window.onload = function() {
         document.getElementById("newUser").setAttribute('class', "tab-pane fade")
         document.getElementById("allUsers").setAttribute('class', "tab-pane fade active show")
         //Reset New user form
-        document.getElementById("createUser").reset();
+        document.getElementById("create-user-form").reset();
         dropCheckboxes()
     })
 }
@@ -24,8 +24,8 @@ window.onload = function() {
 const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
         .then(data => {
             roles = data
-            createAndAppendRoleCheckboxesToForm('roleEdit', "rolesCheckEdit")
-            createAndAppendRoleCheckboxesToForm('roleCreate', "rolesCheckCreate")
+            createAndAppendRoleCheckboxesToForm('edit-user-form-checkbox')
+            createAndAppendRoleCheckboxesToForm('create-user-form-checkbox')
         })
          .catch(err => console.log(err))
 
@@ -79,8 +79,8 @@ function createDeleteButton(){
     return newDeleteButton
 }
 
-function createAndAppendRoleCheckboxesToForm(formId, formIdOld){
-    const rolesChecksEdit = document.getElementById(formIdOld)
+function createAndAppendRoleCheckboxesToForm(formCheckboxId){
+    const rolesChecksEdit = document.getElementById(formCheckboxId)
     roles.forEach(role => {
         const li = document.createElement('li')
         const div = document.createElement('div')
@@ -97,7 +97,7 @@ function createAndAppendRoleCheckboxesToForm(formId, formIdOld){
         input.setAttribute('class', 'form-check-input')
         input.setAttribute('type', 'checkbox')
         input.setAttribute('value', 'on')
-        input.setAttribute('id', formId + role.id) // Take role 'id'
+        input.setAttribute('id', formCheckboxId + role.id) // Take role 'id'
         label.setAttribute('class', '')
         label.textContent = Object.values(role)[1] // Take role 'name'
         div.appendChild(input)
@@ -178,7 +178,7 @@ function populateRoleCheckboxesInForm(formPrefix, userId) {
         .rolesSet.map(role=>role.id)
 
     roles.forEach(role =>{
-        const checkbox = document.getElementById('roleEdit' + role.id)
+        const checkbox = document.getElementById('edit-user-form-checkbox' + role.id)
         if(userRolesIds.includes(role.id)) {
             checkbox.setAttribute('checked', 'checked')
         } else {
@@ -202,7 +202,7 @@ function openEditUserForm(){
     let param = event.target.parentNode.parentNode.id
     tr = event.target.parentNode.parentNode
 
-    document.getElementById("editForm").reset()
+    document.getElementById("edit-user-form").reset()
     dropCheckboxes()
 
     document.getElementById("idEdit").setAttribute('value', tr.childNodes[0].textContent)
@@ -213,12 +213,12 @@ function openEditUserForm(){
     document.getElementById("ageEdit").setAttribute('value', tr.childNodes[5].textContent)
     document.getElementById("emailEdit").setAttribute('value', tr.childNodes[6].textContent)
 
-    populateRoleCheckboxesInForm('roleEdit', param)
+    populateRoleCheckboxesInForm('edit-user-form-checkbox', param)
 }
 
 function setEditedUser() {
     let param = document.getElementById("idEdit").value
-    const qqqRoles = giveRolesArrayFromForm('roleEdit')
+    const qqqRoles = giveRolesArrayFromForm('edit-user-form-checkbox')
 
     tr.childNodes[0].textContent = document.getElementById("idEdit").value
     tr.childNodes[1].textContent = document.getElementById("usernameEdit").value
@@ -261,7 +261,7 @@ function setCreatedUser() {
         tr.appendChild(document.createElement('td'))
     }
 
-    const qqqqRoles = giveRolesArrayFromForm('roleCreate')
+    const qqqqRoles = giveRolesArrayFromForm('create-user-form-checkbox')
 
     tr.setAttribute('id', param)
     tr.childNodes[0].textContent = param

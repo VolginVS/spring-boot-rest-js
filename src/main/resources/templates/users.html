@@ -69,7 +69,7 @@
                         <div class="card-body">
                             <div class="row justify-content-center">
                                 <div class="col-md-3">
-                                    <form id="createUser" action="#" th:action="@{/user-create}" th:object="${user}" method="post">
+                                    <form id="create-user-form" action="#" th:action="@{/user-create}" th:object="${user}" method="post">
                                         <div class="form-group text-center">
                                             <label class="m-0 font-weight-bold" for="usernameCreate">Name:</label>
                                             <input id="usernameCreate" class="form-control" type="text"  placeholder="username">
@@ -95,7 +95,7 @@
                                             <input id="emailCreate" class="form-control" type="text" placeholder="email">
                                         </div>
                                         <div class="form-check">
-                                            <ul id="rolesCheckCreate">
+                                            <ul id="create-user-form-checkbox">
 
                                             </ul>
                                         </div>
@@ -122,7 +122,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="editForm">
+            <form id="edit-user-form">
                 <div class="row justify-content-center">
                     <div class="modal-body col-md-6 ">
                         <input id="idEdit" type="hidden"  placeholder="id">
@@ -151,7 +151,7 @@
                             <input id="emailEdit" type="text" class="form-control"  placeholder="E-Mail">
                         </div>
                         <div class="form-check">
-                            <ul id="rolesCheckEdit">
+                            <ul id="edit-user-form-checkbox">
 
                             </ul>
                         </div>
