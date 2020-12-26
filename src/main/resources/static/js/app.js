@@ -53,24 +53,30 @@ function createDeleteButton(){
     return newDeleteButton
 }
 
+function dropCheckboxes(){
+    const array = document.getElementsByClassName('form-check-input')
+    for(let i=0; i<array.length; i++){
+        console.log(array[i])
+        array[i].removeAttribute('checked')
+    }
+}
+
+
 window.onload = function() {
     document.getElementById("submitUserEdit").addEventListener("click", setEditedUser)
     document.getElementById("submitUserCreate").addEventListener("click", function(){
         setCreatedUser()
+
+        // Redirect on All users tab from New user tab, when click on button 'Create user'
         document.getElementById("home-tab").setAttribute('class', "nav-link active")
         document.getElementById("home-tab").setAttribute('aria-selected', "true")
         document.getElementById("profile-tab").setAttribute('class', "nav-link")
         document.getElementById("profile-tab").setAttribute('aria-selected', "false")
         document.getElementById("newUser").setAttribute('class', "tab-pane fade")
         document.getElementById("allUsers").setAttribute('class', "tab-pane fade active show")
+        //Reset New user form
         document.getElementById("createUser").reset();
-
-        //Drop checkboxes
-        const array = document.getElementsByClassName('form-check-input')
-        for(let i=0; i<array.length; i++){
-            console.log(array[i])
-            array[i].removeAttribute('checked')
-        }
+        dropCheckboxes()
     })
 }
 
@@ -205,37 +211,37 @@ const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
         .catch(err => console.log(err))
 
 editUser = function(){
-        let param = event.target.parentNode.parentNode.id
-        tr = event.target.parentNode.parentNode
-        console.log(event.target.parentNode.parentNode)
-        console.log(param)
-        tr.childNodes.forEach(node => {
-            console.log(node.childNodes.value)
-        })
-        document.getElementById("editForm").reset()
+    let param = event.target.parentNode.parentNode.id
+    tr = event.target.parentNode.parentNode
+    console.log(event.target.parentNode.parentNode)
+    console.log(param)
+    tr.childNodes.forEach(node => {
+        console.log(node.childNodes.value)
+    })
+    document.getElementById("editForm").reset()
+    dropCheckboxes()
 
-        console.log(document.getElementById("idEdit"))
-        document.getElementById("idEdit").setAttribute('value', tr.childNodes[0].textContent)
-        document.getElementById("usernameEdit").setAttribute('value', tr.childNodes[1].textContent)
-        document.getElementById("passwordEdit").setAttribute('value', tr.childNodes[2].textContent)
-        document.getElementById("firstNameEdit").setAttribute('value', tr.childNodes[3].textContent)
-        document.getElementById("lastNameEdit").setAttribute('value', tr.childNodes[4].textContent)
-        document.getElementById("ageEdit").setAttribute('value', tr.childNodes[5].textContent)
-        document.getElementById("emailEdit").setAttribute('value', tr.childNodes[6].textContent)
+    document.getElementById("idEdit").setAttribute('value', tr.childNodes[0].textContent)
+    document.getElementById("usernameEdit").setAttribute('value', tr.childNodes[1].textContent)
+    document.getElementById("passwordEdit").setAttribute('value', tr.childNodes[2].textContent)
+    document.getElementById("firstNameEdit").setAttribute('value', tr.childNodes[3].textContent)
+    document.getElementById("lastNameEdit").setAttribute('value', tr.childNodes[4].textContent)
+    document.getElementById("ageEdit").setAttribute('value', tr.childNodes[5].textContent)
+    document.getElementById("emailEdit").setAttribute('value', tr.childNodes[6].textContent)
 
-        let userRolesIds = users
-            .find(user => user.id === parseInt(param))
-            .rolesSet.map(role=>role.id)
-        console.log(userRolesIds)
-        roles.forEach(role =>{
-            const checkbox = document.getElementById('roleEdit' + role.id)
-            if(userRolesIds.includes(role.id)) {
-                checkbox.setAttribute('checked', 'checked')
-            } else {
-                checkbox.removeAttribute('checked')
-            }
-        })
-    }
+    let userRolesIds = users
+        .find(user => user.id === parseInt(param))
+        .rolesSet.map(role=>role.id)
+
+    roles.forEach(role =>{
+        const checkbox = document.getElementById('roleEdit' + role.id)
+        if(userRolesIds.includes(role.id)) {
+            checkbox.setAttribute('checked', 'checked')
+        } else {
+            checkbox.removeAttribute('checked')
+        }
+    })
+}
 
 function setEditedUser() {
         let param = document.getElementById("idEdit").value
@@ -273,24 +279,9 @@ function setEditedUser() {
             email: tr.childNodes[6].textContent,
             rolesSet: qqqRoles
         }
-        console.log(JSON.stringify(qqq))
-         // const loginnn = sendRequest('POST','http://localhost:8080/login', loginForm)
-         //    .catch(err => console.log(err))
-
 
         const edit = sendRequest('PUT', requestUrl + 'users/', qqq)
             .then(response => {
-                //If request success, edit line with user in the table
-                if (response.ok) {
-                    document.getElementById("editForm").reset()
-                    document.getElementById("idEdit").setAttribute('value', '')
-                    document.getElementById("usernameEdit").setAttribute('value', '')
-                    document.getElementById("passwordEdit").setAttribute('value', '')
-                    document.getElementById("firstNameEdit").setAttribute('value', '')
-                    document.getElementById("lastNameEdit").setAttribute('value', '')
-                    document.getElementById("ageEdit").setAttribute('value', '')
-                    document.getElementById("emailEdit").setAttribute('value', '')
-                }
                 return response.json().then(error => {
                     const e = new Error('Ошибка лол')
                     e.data = error
