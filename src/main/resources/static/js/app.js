@@ -1,3 +1,4 @@
+const requestUrl = 'http://localhost:8080/'
 let tr
 let roles
 let users
@@ -14,7 +15,6 @@ function sendRequest(method, url, body = null) {
         'Accept-Encoding': 'gzip, deflate, br',
         'Connection': 'keep-alive'
     }
-
     return fetch(url, {
         method: method,
         headers: headers,
@@ -31,7 +31,27 @@ function sendRequest(method, url, body = null) {
     })
 }
 
-const requestUrl = 'http://localhost:8080/'
+function createEditButton(){
+    const newEditButton = document.createElement('button')
+    newEditButton.textContent ='Edit'
+    newEditButton.setAttribute('type', "button")
+    newEditButton.setAttribute('class', "btn btn-info")
+    newEditButton.setAttribute('data-toggle', "modal")
+    newEditButton.setAttribute('data-target', "#upd")
+    newEditButton.onclick = editUser
+    return newEditButton
+}
+
+function createDeleteButton(){
+    const newDeleteButton = document.createElement('button')
+    newDeleteButton.textContent ='Delete'
+    newDeleteButton.setAttribute('type', "button")
+    newDeleteButton.setAttribute('class', "btn btn-danger")
+    newDeleteButton.setAttribute('data-toggle', "modal")
+    newDeleteButton.setAttribute('data-target', "#del")
+    newDeleteButton.onclick = deleteUser
+    return newDeleteButton
+}
 
 window.onload = function() {
     document.getElementById("submitUserEdit").addEventListener("click", setEditedUser)
@@ -164,27 +184,16 @@ const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
                 })
                 //Edit button
                 myThEdit = document.createElement('td')
-                const myEditButton = document.createElement('button')
+                const myEditButton = createEditButton()
                 myThEdit.appendChild(myEditButton)
-                myEditButton.textContent ='Edit'
-                myEditButton.setAttribute('type', "button")
-                myEditButton.setAttribute('class', "btn btn-info")
-                myEditButton.setAttribute('data-toggle', "modal")
-                myEditButton.setAttribute('data-target', "#upd")
-                myEditButton.onclick = editUser
                 myTr.appendChild(myThEdit)
 
                 //Delete button
                 myThDelete = document.createElement('td')
-                const myDeleteButton = document.createElement('button')
+                const myDeleteButton = createDeleteButton()
                 myThDelete.appendChild(myDeleteButton)
-                myDeleteButton.textContent ='Delete'
-                myDeleteButton.setAttribute('type', "button")
-                myDeleteButton.setAttribute('class', "btn btn-danger")
-                myDeleteButton.setAttribute('data-toggle', "modal")
-                myDeleteButton.setAttribute('data-target', "#del")
-                myDeleteButton.onclick = deleteUser
                 myTr.appendChild(myThDelete)
+
                 myTableBody.appendChild(myTr)
             })
 
@@ -319,24 +328,11 @@ function setCreatedUser() {
         tr.childNodes[6].textContent = document.getElementById("emailCreate").value
         qqqqRoles.forEach((parts) => tr.childNodes[7].textContent += (" /"+ parts.name))
 
-        const myEditButton = document.createElement('button')
+        const myEditButton = createEditButton()
         tr.childNodes[8].appendChild(myEditButton)
-        myEditButton.textContent ='Edit'
-        myEditButton.setAttribute('type', "button")
-        myEditButton.setAttribute('class', "btn btn-info")
-        myEditButton.setAttribute('data-toggle', "modal")
-        myEditButton.setAttribute('data-target', "#upd")
-        myEditButton.onclick = editUser
 
-        const myDeleteButton = document.createElement('button')
+        const myDeleteButton = createDeleteButton()
         tr.childNodes[9].appendChild(myDeleteButton)
-        myDeleteButton.textContent ='Delete'
-        myDeleteButton.setAttribute('type', "button")
-        myDeleteButton.setAttribute('class', "btn btn-danger")
-        myDeleteButton.setAttribute('data-toggle', "modal")
-        myDeleteButton.setAttribute('data-target', "#del")
-        myDeleteButton.onclick = deleteUser
-        console.log(table.lastElementChild.id )
         tableBody.appendChild(tr)
 
         const qqqq = {
