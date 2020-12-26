@@ -53,6 +53,34 @@ function createDeleteButton(){
     return newDeleteButton
 }
 
+function createAndAppendRoleCheckboxesToForm(formId, formIdOld){
+    const rolesChecksEdit = document.getElementById(formIdOld)
+    roles.forEach(role => {
+        const li = document.createElement('li')
+        const div = document.createElement('div')
+        const label = document.createElement('label')
+        const input = document.createElement('input')
+        input.addEventListener('change', function(){
+            if(input.hasAttribute('checked')){
+                input.removeAttribute('checked')
+            } else {
+                input.setAttribute('checked', 'checked')
+            }
+        })
+
+        input.setAttribute('class', 'form-check-input')
+        input.setAttribute('type', 'checkbox')
+        input.setAttribute('value', 'on')
+        input.setAttribute('id', formId + role.id) // Take role 'id'
+        label.setAttribute('class', '')
+        label.textContent = Object.values(role)[1] // Take role 'name'
+        div.appendChild(input)
+        div.appendChild(label)
+        li.appendChild(div)
+        rolesChecksEdit.appendChild(li)
+    })
+}
+
 function dropCheckboxes(){
     const array = document.getElementsByClassName('form-check-input')
     for(let i=0; i<array.length; i++){
@@ -108,63 +136,62 @@ window.onload = function() {
 const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
         .then(data => {
             roles = data
+            createAndAppendRoleCheckboxesToForm('roleEdit', "rolesCheckEdit")
+            createAndAppendRoleCheckboxesToForm('roleCreate', "rolesCheckCreate")
+            // const rolesChecksEdit = document.getElementById("rolesCheckEdit")
+            // roles.forEach(role => {
+            //     const li = document.createElement('li')
+            //     const div = document.createElement('div')
+            //     const label = document.createElement('label')
+            //     const input = document.createElement('input')
+            //     input.addEventListener('change', function(){
+            //         if(input.hasAttribute('checked')){
+            //             input.removeAttribute('checked')
+            //         } else {
+            //             input.setAttribute('checked', 'checked')
+            //         }
+            //     })
+            //
+            //     input.setAttribute('class', 'form-check-input')
+            //     input.setAttribute('type', 'checkbox')
+            //     input.setAttribute('value', 'on')
+            //     input.setAttribute('id', 'roleEdit'+role.id) // Take role 'id'
+            //     label.setAttribute('class', '')
+            //     label.textContent = Object.values(role)[1] // Take role 'name'
+            //     div.appendChild(input)
+            //     div.appendChild(label)
+            //     li.appendChild(div)
+            //     rolesChecksEdit.appendChild(li)
+            // })
 
-            const rolesChecksEdit = document.getElementById("rolesCheckEdit")
-            roles.forEach(role => {
-                const li = document.createElement('li')
-                const div = document.createElement('div')
-                const label = document.createElement('label')
-                const input = document.createElement('input')
-                input.addEventListener('change', function(){
-                    if(input.hasAttribute('checked')){
-                        input.removeAttribute('checked')
-                    } else {
-                        input.setAttribute('checked', 'checked')
-                    }
-                })
-
-                input.setAttribute('class', 'form-check-input')
-                input.setAttribute('type', 'checkbox')
-                input.setAttribute('value', 'on')
-                input.setAttribute('id', 'roleEdit'+role.id) // Take role 'id'
-                console.log(Object.values(role)[1])
-                console.log(Object.values(role))
-                label.setAttribute('class', '')
-                label.textContent = Object.values(role)[1] // Take role 'name'
-                div.appendChild(input)
-                div.appendChild(label)
-                li.appendChild(div)
-                rolesChecksEdit.appendChild(li)
-            })
-
-            const rolesChecksCreate = document.getElementById("rolesCheckCreate")
-
-            roles.forEach(role => {
-                const li = document.createElement('li')
-                const div = document.createElement('div')
-                const label = document.createElement('label')
-                const input = document.createElement('input')
-                input.addEventListener('change', function(){
-                    if(input.hasAttribute('checked')){
-                        input.removeAttribute('checked')
-                    } else {
-                        input.setAttribute('checked', 'checked')
-                    }
-                })
-
-                input.setAttribute('class', 'form-check-input')
-                input.setAttribute('type', 'checkbox')
-                input.setAttribute('value', 'on')
-                input.setAttribute('id', 'roleCreate'+Object.values(role)[0]) // Take role 'id'
-                console.log(Object.values(role)[1])
-                console.log(Object.values(role))
-                label.setAttribute('class', '')
-                label.textContent = Object.values(role)[1] // Take role 'name'
-                div.appendChild(input)
-                div.appendChild(label)
-                li.appendChild(div)
-                rolesChecksCreate.appendChild(li)
-            })
+            // const rolesChecksCreate = document.getElementById("rolesCheckCreate")
+            //
+            // roles.forEach(role => {
+            //     const li = document.createElement('li')
+            //     const div = document.createElement('div')
+            //     const label = document.createElement('label')
+            //     const input = document.createElement('input')
+            //     input.addEventListener('change', function(){
+            //         if(input.hasAttribute('checked')){
+            //             input.removeAttribute('checked')
+            //         } else {
+            //             input.setAttribute('checked', 'checked')
+            //         }
+            //     })
+            //
+            //     input.setAttribute('class', 'form-check-input')
+            //     input.setAttribute('type', 'checkbox')
+            //     input.setAttribute('value', 'on')
+            //     input.setAttribute('id', 'roleCreate'+Object.values(role)[0]) // Take role 'id'
+            //     console.log(Object.values(role)[1])
+            //     console.log(Object.values(role))
+            //     label.setAttribute('class', '')
+            //     label.textContent = Object.values(role)[1] // Take role 'name'
+            //     div.appendChild(input)
+            //     div.appendChild(label)
+            //     li.appendChild(div)
+            //     rolesChecksCreate.appendChild(li)
+            // })
 
         })
          .catch(err => console.log(err))
