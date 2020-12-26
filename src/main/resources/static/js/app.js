@@ -395,9 +395,6 @@ function setCreatedUser() {
             rolesSet: qqqqRoles
         }
         const uuu = sendRequest('POST', requestUrl + 'users/', qqqq)
-
-
-
     }
 
     function deleteUser() {
@@ -409,5 +406,4 @@ function setCreatedUser() {
             })
             .catch(err => console.log(err))
         document.getElementById(param).remove()
-
     }
