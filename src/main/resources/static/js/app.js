@@ -3,15 +3,41 @@ let tr
 let roles
 let users
 
-// const login = "tt"
-// const password = "tt"
+window.onload = function() {
+    document.getElementById("submitUserEdit").addEventListener("click", setEditedUser)
+    document.getElementById("submitUserCreate").addEventListener("click", function(){
+        setCreatedUser()
 
+        // Redirect on All users tab from New user tab, when click on button 'Create user'
+        document.getElementById("home-tab").setAttribute('class', "nav-link active")
+        document.getElementById("home-tab").setAttribute('aria-selected', "true")
+        document.getElementById("profile-tab").setAttribute('class', "nav-link")
+        document.getElementById("profile-tab").setAttribute('aria-selected', "false")
+        document.getElementById("newUser").setAttribute('class', "tab-pane fade")
+        document.getElementById("allUsers").setAttribute('class', "tab-pane fade active show")
+        //Reset New user form
+        document.getElementById("createUser").reset();
+        dropCheckboxes()
+    })
+}
+
+const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
+        .then(data => {
+            roles = data
+            createAndAppendRoleCheckboxesToForm('roleEdit', "rolesCheckEdit")
+            createAndAppendRoleCheckboxesToForm('roleCreate', "rolesCheckCreate")
+        })
+         .catch(err => console.log(err))
+
+const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
+        .then(data => populateUsersTable(data))
+        .catch(err => console.log(err))
+
+// Functions
 function sendRequest(method, url, body = null) {
     const headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': '*/*',
-        //'Authorization': (login + ':' + password),
-        // 'Authorization': "Basic " + btoa(login + ':' + password),
         'Accept-Encoding': 'gzip, deflate, br',
         'Connection': 'keep-alive'
     }
@@ -89,6 +115,63 @@ function dropCheckboxes(){
     }
 }
 
+function populateUsersTable(data){
+    users = data
+
+    const table = document.getElementById('usersTable')
+    const tableHead = table.createTHead()
+    const tableBody = table.createTBody()
+    tableBody.setAttribute('id', 'usersTableBody')
+
+    //Populate table head
+    let tr = document.createElement('tr')
+    let td
+    Object.keys(data[0]).forEach(key => {
+        td = document.createElement('th')
+        td.textContent = key
+        tr.appendChild(td)
+    })
+    let tdEdit = document.createElement('th')
+    tdEdit.textContent ='Edit'
+    tr.appendChild(tdEdit)
+    let tdDelete = document.createElement('th')
+    tdDelete.textContent ='Delete'
+    tr.appendChild(tdDelete)
+    tableHead.appendChild(tr)
+
+    //Populate table body
+    data.forEach(elem => {
+        tr = document.createElement('tr')
+        tr.setAttribute('id', elem.id)
+
+        Object.values(elem).forEach(value => {
+            const td = document.createElement('td')
+            //Проверка, чтобы отыскать объекты типа Role и правильно их вывести
+            if(value != null) {
+                if(typeof(value) === 'object') {
+                    value.forEach((parts) => td.textContent += (" /"+ parts.name))
+                } else {
+                    td.textContent = value
+                }
+            }
+            tr.appendChild(td)
+        })
+        //Edit button
+        tdEdit = document.createElement('td')
+        const editButton = createEditButton()
+        tdEdit.appendChild(editButton)
+        tr.appendChild(tdEdit)
+
+        //Delete button
+        tdDelete = document.createElement('td')
+        const deleteButton = createDeleteButton()
+        tdDelete.appendChild(deleteButton)
+        tr.appendChild(tdDelete)
+
+        tableBody.appendChild(tr)
+    })
+}
+
 function populateRoleCheckboxesInForm(formPrefix, userId) {
     let userRolesIds = users
         .find(user => user.id === parseInt(userId))
@@ -115,96 +198,7 @@ function giveRolesArrayFromForm(formId){
     return userRoles
 }
 
-window.onload = function() {
-    document.getElementById("submitUserEdit").addEventListener("click", setEditedUser)
-    document.getElementById("submitUserCreate").addEventListener("click", function(){
-        setCreatedUser()
-
-        // Redirect on All users tab from New user tab, when click on button 'Create user'
-        document.getElementById("home-tab").setAttribute('class', "nav-link active")
-        document.getElementById("home-tab").setAttribute('aria-selected', "true")
-        document.getElementById("profile-tab").setAttribute('class', "nav-link")
-        document.getElementById("profile-tab").setAttribute('aria-selected', "false")
-        document.getElementById("newUser").setAttribute('class', "tab-pane fade")
-        document.getElementById("allUsers").setAttribute('class', "tab-pane fade active show")
-        //Reset New user form
-        document.getElementById("createUser").reset();
-        dropCheckboxes()
-    })
-}
-
-const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
-        .then(data => {
-            roles = data
-            createAndAppendRoleCheckboxesToForm('roleEdit', "rolesCheckEdit")
-            createAndAppendRoleCheckboxesToForm('roleCreate', "rolesCheckCreate")
-        })
-         .catch(err => console.log(err))
-
-const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
-        .then(data => {
-            users = data
-
-            const table = document.getElementById('usersTable')
-            const tableHead = table.createTHead()
-            const tableBody = table.createTBody()
-            tableBody.setAttribute('id', 'usersTableBody')
-
-            //Populate table head
-            let tr = document.createElement('tr')
-            let td
-            Object.keys(data[0]).forEach(key => {
-                td = document.createElement('th')
-                td.textContent = key
-                tr.appendChild(td)
-            })
-            let tdEdit = document.createElement('th')
-            tdEdit.textContent ='Edit'
-            tr.appendChild(tdEdit)
-            let tdDelete = document.createElement('th')
-            tdDelete.textContent ='Delete'
-            tr.appendChild(tdDelete)
-            tableHead.appendChild(tr)
-
-            //Populate table body
-            data.forEach(elem => {
-                tr = document.createElement('tr')
-                tr.setAttribute('id', elem.id)
-
-                Object.values(elem).forEach(value => {
-                    const td = document.createElement('td')
-                    //Проверка, чтобы отыскать объекты типа Role и правильно их вывести
-                    if(value != null) {
-                        if(typeof(value) === 'object') {
-                            value.forEach((parts) => td.textContent += (" /"+ parts.name))
-                        } else {
-                            td.textContent = value
-                        }
-                    }
-                    tr.appendChild(td)
-                })
-                //Edit button
-                tdEdit = document.createElement('td')
-                const editButton = createEditButton()
-                tdEdit.appendChild(editButton)
-                tr.appendChild(tdEdit)
-
-                //Delete button
-                tdDelete = document.createElement('td')
-                const deleteButton = createDeleteButton()
-                tdDelete.appendChild(deleteButton)
-                tr.appendChild(tdDelete)
-
-                tableBody.appendChild(tr)
-            })
-
-            table.appendChild(tableBody)
-            console.log(table.lastElementChild.id)
-            console.log(table.lastElementChild.lastElementChild.id)
-        })
-        .catch(err => console.log(err))
-
-openEditUserForm = function(){
+function openEditUserForm(){
     let param = event.target.parentNode.parentNode.id
     tr = event.target.parentNode.parentNode
 
