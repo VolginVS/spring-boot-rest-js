@@ -138,125 +138,69 @@ const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
             roles = data
             createAndAppendRoleCheckboxesToForm('roleEdit', "rolesCheckEdit")
             createAndAppendRoleCheckboxesToForm('roleCreate', "rolesCheckCreate")
-            // const rolesChecksEdit = document.getElementById("rolesCheckEdit")
-            // roles.forEach(role => {
-            //     const li = document.createElement('li')
-            //     const div = document.createElement('div')
-            //     const label = document.createElement('label')
-            //     const input = document.createElement('input')
-            //     input.addEventListener('change', function(){
-            //         if(input.hasAttribute('checked')){
-            //             input.removeAttribute('checked')
-            //         } else {
-            //             input.setAttribute('checked', 'checked')
-            //         }
-            //     })
-            //
-            //     input.setAttribute('class', 'form-check-input')
-            //     input.setAttribute('type', 'checkbox')
-            //     input.setAttribute('value', 'on')
-            //     input.setAttribute('id', 'roleEdit'+role.id) // Take role 'id'
-            //     label.setAttribute('class', '')
-            //     label.textContent = Object.values(role)[1] // Take role 'name'
-            //     div.appendChild(input)
-            //     div.appendChild(label)
-            //     li.appendChild(div)
-            //     rolesChecksEdit.appendChild(li)
-            // })
-
-            // const rolesChecksCreate = document.getElementById("rolesCheckCreate")
-            //
-            // roles.forEach(role => {
-            //     const li = document.createElement('li')
-            //     const div = document.createElement('div')
-            //     const label = document.createElement('label')
-            //     const input = document.createElement('input')
-            //     input.addEventListener('change', function(){
-            //         if(input.hasAttribute('checked')){
-            //             input.removeAttribute('checked')
-            //         } else {
-            //             input.setAttribute('checked', 'checked')
-            //         }
-            //     })
-            //
-            //     input.setAttribute('class', 'form-check-input')
-            //     input.setAttribute('type', 'checkbox')
-            //     input.setAttribute('value', 'on')
-            //     input.setAttribute('id', 'roleCreate'+Object.values(role)[0]) // Take role 'id'
-            //     console.log(Object.values(role)[1])
-            //     console.log(Object.values(role))
-            //     label.setAttribute('class', '')
-            //     label.textContent = Object.values(role)[1] // Take role 'name'
-            //     div.appendChild(input)
-            //     div.appendChild(label)
-            //     li.appendChild(div)
-            //     rolesChecksCreate.appendChild(li)
-            // })
-
         })
          .catch(err => console.log(err))
 
 const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
         .then(data => {
-            // console.log(data)
-            // console.log(data[2].value)
             users = data
-            return(data)
-        })
-        .then(data => {
-            const myTable = document.getElementById('usersTable')
-            myTable.createTHead()
-            const myTableBody = myTable.createTBody()
-            myTableBody.setAttribute('id', 'usersTableBody')
-            let myTr = document.createElement('tr')
-            let myTd
+
+            const table = document.getElementById('usersTable')
+            const tableHead = table.createTHead()
+            const tableBody = table.createTBody()
+            tableBody.setAttribute('id', 'usersTableBody')
+
+            //Populate table head
+            let tr = document.createElement('tr')
+            let td
             Object.keys(data[0]).forEach(key => {
-                myTd = document.createElement('th')
-                myTd.textContent = key
-                myTr.appendChild(myTd)
+                td = document.createElement('th')
+                td.textContent = key
+                tr.appendChild(td)
             })
-            let myThEdit = document.createElement('th')
-            myThEdit.textContent ='Edit'
-            myTr.appendChild(myThEdit)
-            let myThDelete = document.createElement('th')
-            myThDelete.textContent ='Delete'
-            myTr.appendChild(myThDelete)
+            let tdEdit = document.createElement('th')
+            tdEdit.textContent ='Edit'
+            tr.appendChild(tdEdit)
+            let tdDelete = document.createElement('th')
+            tdDelete.textContent ='Delete'
+            tr.appendChild(tdDelete)
+            tableHead.appendChild(tr)
 
-            myTable.tHead.appendChild(myTr)
-
+            //Populate table body
             data.forEach(elem => {
-                myTr = document.createElement('tr')
-                myTr.setAttribute('id', elem.id)
+                tr = document.createElement('tr')
+                tr.setAttribute('id', elem.id)
 
                 Object.values(elem).forEach(value => {
-                    const myTd = document.createElement('td')
+                    const td = document.createElement('td')
+                    //Проверка, чтобы отыскать объекты типа Role и правильно их вывести
                     if(value != null) {
                         if(typeof(value) === 'object') {
-                            value.forEach((parts) => myTd.textContent += (" /"+ parts.name)) //Проверка, чтобы отыскать объекты типа Role и правильно их вывести
+                            value.forEach((parts) => td.textContent += (" /"+ parts.name))
                         } else {
-                            myTd.textContent = value
+                            td.textContent = value
                         }
                     }
-                    myTr.appendChild(myTd)
+                    tr.appendChild(td)
                 })
                 //Edit button
-                myThEdit = document.createElement('td')
-                const myEditButton = createEditButton()
-                myThEdit.appendChild(myEditButton)
-                myTr.appendChild(myThEdit)
+                tdEdit = document.createElement('td')
+                const editButton = createEditButton()
+                tdEdit.appendChild(editButton)
+                tr.appendChild(tdEdit)
 
                 //Delete button
-                myThDelete = document.createElement('td')
-                const myDeleteButton = createDeleteButton()
-                myThDelete.appendChild(myDeleteButton)
-                myTr.appendChild(myThDelete)
+                tdDelete = document.createElement('td')
+                const deleteButton = createDeleteButton()
+                tdDelete.appendChild(deleteButton)
+                tr.appendChild(tdDelete)
 
-                myTableBody.appendChild(myTr)
+                tableBody.appendChild(tr)
             })
 
-            myTable.appendChild(myTableBody)
-            console.log(myTable.lastElementChild.id)
-            console.log(myTable.lastElementChild.lastElementChild.id)
+            table.appendChild(tableBody)
+            console.log(table.lastElementChild.id)
+            console.log(table.lastElementChild.lastElementChild.id)
         })
         .catch(err => console.log(err))
 
