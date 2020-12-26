@@ -29,7 +29,7 @@ const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
             rolesBuff.forEach(role => console.log(role.name))
 
         })
-         .catch(err => console.log(err))
+        .catch(err => console.log(err))
 
 const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
         .then(data => populateUsersTable(data))
@@ -219,9 +219,9 @@ function openEditUserForm(){
 }
 
 function setEditedUser() {
-    let userId = document.getElementById("idEdit").value
+    let userId = parseInt(document.getElementById("idEdit").value)
     const editedUser = {
-        id: parseInt(userId),
+        id: userId,
         username: document.getElementById("usernameEdit").value,
         password: document.getElementById("passwordEdit").value,
         firstName: document.getElementById("firstNameEdit").value,
@@ -230,8 +230,14 @@ function setEditedUser() {
         email: document.getElementById("emailEdit").value,
         rolesSet: giveRolesArrayFromForm('edit-user-form-checkbox')
     }
-    const edit = sendRequest('PUT', requestUrl + 'users/', editedUser)
+    sendRequest('PUT', requestUrl + 'users/', editedUser)
         .then(response => {
+            //Update usersBuff with edited user
+            for(let i=0; i < usersBuff.length; i++){
+                if((usersBuff[i].id === editedUser.id)){
+                    usersBuff[i] = editedUser
+                }
+            }
             return response.json().then(error => {
                 const e = new Error('Ошибка лол')
                 e.data = error
