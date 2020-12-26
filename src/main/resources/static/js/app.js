@@ -1,6 +1,6 @@
 let tr
-const login = "tt"
-const password = "tt"
+// const login = "tt"
+// const password = "tt"
 
 function sendRequest(method, url, body = null) {
     const headers = {
@@ -48,42 +48,9 @@ window.onload = function() {
             console.log(array[i])
             array[i].removeAttribute('checked')
         }
-
-    })
-//    document.getElementById("close").onclick = document.getElementById("").reset();
-
-
-//    document.getElementById("submitUserCreate").onclick = document.getElementById("createUser").reset();
-}
-
-loginForm = "    username: 'tt',\n" +
-    "    password: 'tt'"
-
-//const loginnn = sendRequest('POST','http://localhost:8080/login', loginForm)
-//    .catch(err => console.log(err))
-function loginRequest(method, url, body = null) {
-    const headers = {
-        'Content-Type': 'text/html; charset=UTF-8',
-        'Accept': '*/*',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive'
-    }
-
-    return fetch(url, {
-        method: method,
-        headers: headers,
-        credentials: "same-origin",
-        body: (body === null) ? (null) : (body)
-    }).then(response =>{
-        if (response.ok) {
-            return response.json()
-        }
-        return response.json().then(error => {
-            const e = new Error('Ошибка лол')
-            e.data = error
-        })
     })
 }
+
 let roles
 
 const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
@@ -374,15 +341,6 @@ function setCreatedUser() {
         myDeleteButton.onclick = deleteUser
         console.log(table.lastElementChild.id )
         tableBody.appendChild(tr)
-
-        // document.getElementById("createForm").reset()
-        // document.getElementById("idCreate").setAttribute('value', '')
-        // document.getElementById("usernameCreate").setAttribute('value', '')
-        // document.getElementById("passwordCreate").setAttribute('value', '')
-        // document.getElementById("firstNameCreate").setAttribute('value', '')
-        // document.getElementById("lastNameCreate").setAttribute('value', '')
-        // document.getElementById("ageCreate").setAttribute('value', '')
-        // document.getElementById("emailCreate").setAttribute('value', '')
 
         const qqqq = {
             id: parseInt(tr.childNodes[0].textContent),
