@@ -1,7 +1,7 @@
 const requestUrl = 'http://localhost:8080/'
 let tr
-let roles
-let users
+let rolesBuff
+let usersBuff
 
 window.onload = function() {
     document.getElementById("submitUserEdit").addEventListener("click", setEditedUser)
@@ -13,8 +13,8 @@ window.onload = function() {
         document.getElementById("home-tab").setAttribute('aria-selected', "true")
         document.getElementById("profile-tab").setAttribute('class', "nav-link")
         document.getElementById("profile-tab").setAttribute('aria-selected', "false")
-        document.getElementById("newUser").setAttribute('class', "tab-pane fade")
-        document.getElementById("allUsers").setAttribute('class', "tab-pane fade active show")
+        document.getElementById("new-user").setAttribute('class', "tab-pane fade")
+        document.getElementById("all-users").setAttribute('class', "tab-pane fade active show")
         //Reset New user form
         document.getElementById("create-user-form").reset();
         dropCheckboxes()
@@ -23,7 +23,7 @@ window.onload = function() {
 
 const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
         .then(data => {
-            roles = data
+            rolesBuff = data
             createAndAppendRoleCheckboxesToForm('edit-user-form-checkbox')
             createAndAppendRoleCheckboxesToForm('create-user-form-checkbox')
         })
@@ -81,7 +81,7 @@ function createDeleteButton(){
 
 function createAndAppendRoleCheckboxesToForm(formCheckboxId){
     const rolesChecksEdit = document.getElementById(formCheckboxId)
-    roles.forEach(role => {
+    rolesBuff.forEach(role => {
         const li = document.createElement('li')
         const div = document.createElement('div')
         const label = document.createElement('label')
@@ -116,12 +116,12 @@ function dropCheckboxes(){
 }
 
 function populateUsersTable(data){
-    users = data
+    usersBuff = data
 
-    const table = document.getElementById('usersTable')
+    const table = document.getElementById('users-table')
     const tableHead = table.createTHead()
     const tableBody = table.createTBody()
-    tableBody.setAttribute('id', 'usersTableBody')
+    tableBody.setAttribute('id', 'users-table-body')
 
     //Populate table head
     let tr = document.createElement('tr')
@@ -173,11 +173,11 @@ function populateUsersTable(data){
 }
 
 function populateRoleCheckboxesInForm(formPrefix, userId) {
-    let userRolesIds = users
+    let userRolesIds = usersBuff
         .find(user => user.id === parseInt(userId))
         .rolesSet.map(role=>role.id)
 
-    roles.forEach(role =>{
+    rolesBuff.forEach(role =>{
         const checkbox = document.getElementById('edit-user-form-checkbox' + role.id)
         if(userRolesIds.includes(role.id)) {
             checkbox.setAttribute('checked', 'checked')
@@ -189,7 +189,7 @@ function populateRoleCheckboxesInForm(formPrefix, userId) {
 
 function giveRolesArrayFromForm(formId){
     let userRoles = []
-    roles.forEach(role =>{
+    rolesBuff.forEach(role =>{
         const checkbox = document.getElementById(formId + role.id)
         if(checkbox.hasAttribute('checked')) {
             userRoles.push(role)
@@ -252,8 +252,8 @@ function setEditedUser() {
 }
 
 function setCreatedUser() {
-    const table = document.getElementById('usersTable')
-    const tableBody = document.getElementById('usersTableBody')
+    const table = document.getElementById('users-table')
+    const tableBody = document.getElementById('users-table-body')
     const param = (1 + parseInt(table.lastElementChild.lastElementChild.id)).toString()
     //console.log(param)
     tr = document.createElement('tr')
