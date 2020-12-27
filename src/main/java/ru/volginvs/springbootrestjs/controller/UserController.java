@@ -11,7 +11,6 @@ import ru.volginvs.springbootrestjs.model.User;
 import ru.volginvs.springbootrestjs.service.RoleService;
 import ru.volginvs.springbootrestjs.service.UserService;
 
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -35,7 +34,7 @@ public class UserController {
 
     @GetMapping(value = "/registration")
     public String getRegistrationPage(Model model) {
-        Set<Role> roleSet = roleService.getAllRoles();
+        Set<Role> roleSet = roleService.getAll();
         model.addAttribute("roleSet", roleSet);
         model.addAttribute("userForm", new User());
         return "registration";
@@ -64,38 +63,7 @@ public class UserController {
         String username= auth.getName();
 
         User activeUser = userService.getByUsername(username);
-        //List<User> userList = userService.getAll();
-        //Set<Role> roleSet = roleService.getAllRoles();
         model.addAttribute("activeUser", activeUser);
-        //model.addAttribute("userList", userList);
-        //model.addAttribute("roleSet", roleSet);
         return "users";
-    }
-
-    @PostMapping(value = "user-create")
-    public String createUser(@ModelAttribute("userForm") User user) {
-        userService.save(user);
-        return "redirect:/admin";
-    }
-
-    @GetMapping(value = "user-edit/{id}")
-    public String getUserEditPage(@PathVariable("id") Long id, Model model) {
-        User user = userService.getById(id);
-        Set<Role> roleSet = roleService.getAllRoles();
-        model.addAttribute("user", user);
-        model.addAttribute("roleSet", roleSet);
-        return "user-edit";
-    }
-
-    @PostMapping(value = "user-edit")
-    public String editUser(@ModelAttribute("user") User user) {
-        userService.update(user);
-        return "redirect:/admin";
-    }
-
-    @GetMapping(value = "user-delete/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
-        userService.removeById(id);
-        return "redirect:/admin";
     }
 }

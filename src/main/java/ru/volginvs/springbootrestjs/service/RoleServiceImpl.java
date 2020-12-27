@@ -23,8 +23,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(readOnly = true)
-    public Set<Role> getAllRoles() {
-        return roleDao.getAllRoles();
+    public Set<Role> getAll() {
+        return roleDao.getAll();
     }
 
     @Override
@@ -33,5 +33,4 @@ public class RoleServiceImpl implements RoleService {
         Role role = getByName(rolename);
         user.getRoles().add(role);
     }
-
 }
