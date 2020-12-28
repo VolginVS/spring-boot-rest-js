@@ -13,14 +13,4 @@ public class SpringBootRestJsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootRestJsApplication.class, args);
 	}
-
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurerAdapter() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/users").allowedOrigins("http://localhost:63342");
-			}
-		};
-	}
 }

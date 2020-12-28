@@ -27,7 +27,6 @@ const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
             createAndAppendRoleCheckboxesToForm('edit-user-form-checkbox')
             createAndAppendRoleCheckboxesToForm('create-user-form-checkbox')
             rolesBuff.forEach(role => console.log(role.name))
-
         })
         .catch(err => console.log(err))
 
@@ -53,8 +52,9 @@ function sendRequest(method, url, body = null) {
             return response.json()
         }
         return response.json().then(error => {
-            const e = new Error('Ошибка лол')
+            const e = new Error('Ошибка')
             e.data = error
+            throw e
         })
     })
 }
