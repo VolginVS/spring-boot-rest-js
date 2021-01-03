@@ -53,8 +53,4 @@ public class UserServiceImpl implements UserService{
     public User getByUsername(String username) {
         return userDao.getByUsername(username);
     }
-
-    // ??? ты присераешь role к POJO объекту, но при этом не записываешь ее в базу данных
-
-    
 }

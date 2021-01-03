@@ -33,6 +33,11 @@ const recivedRolesJson = sendRequest('GET', requestUrl + 'roles/')
 const recivedUsersJson = sendRequest('GET', requestUrl + 'users/')
         .then(data => populateUsersTable(data))
         .catch(err => console.log(err))
+const urlAvito = 'https://www.avito.ru/moskva/muzykalnye_instrumenty/udarnye-ASgBAgICAUTEAs4K?q=%D1%8D%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BD%D0%BD%D1%8B%D0%B5+%D0%B1%D0%B0%D1%80%D0%B0%D0%B1%D0%B0%D0%BD%D1%8B'
+
+const recivedInfo = sendRequest('GET', urlAvito)
+        .then(data => console.log(data))
+        .catch(err => console.log(err))
 
 // Functions
 function sendRequest(method, url, body = null) {
